@@ -1,0 +1,82 @@
+local execute = vim.api.nvim_command
+
+if vim.fn.empty(vim.fn.glob('~/.config/nvim/autoload/plug.vim')) > 0 then
+  execute(
+    [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
+  )
+  vim.cmd([[ autocmd VimEnter * PlugInstall --sync ]])
+end
+
+local Plug = vim.fn['plug#']
+
+vim.call('plug#begin', '/home/cjnucette/.config/nvim/plugged')
+-- dependencies
+-- Plug('MunifTanjim/nui.nvim') -- package-info dependency
+Plug('nvim-lua/plenary.nvim') -- Telescope dependecy
+Plug('kyazdani42/nvim-web-devicons') -- various packages
+
+-- Treesitter
+Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+
+-- themes
+Plug('marko-cerovac/material.nvim')
+Plug('folke/tokyonight.nvim')
+Plug('joshdick/onedark.vim')
+Plug('shaunsingh/nord.nvim')
+
+-- lsp
+Plug('neovim/nvim-lspconfig')
+Plug('williamboman/nvim-lsp-installer')
+Plug('jose-elias-alvarez/null-ls.nvim')
+Plug('j-hui/fidget.nvim')
+
+-- completion and snippets
+Plug('hrsh7th/nvim-cmp')
+Plug('hrsh7th/vim-vsnip')
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('hrsh7th/cmp-nvim-lua')
+Plug('hrsh7th/cmp-buffer')
+Plug('hrsh7th/cmp-path')
+Plug('hrsh7th/cmp-vsnip')
+
+-- statusline
+Plug('rebelot/heirline.nvim')
+
+-- telescope
+Plug('nvim-telescope/telescope.nvim')
+Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'make' })
+
+-- others
+Plug('akinsho/bufferline.nvim')
+Plug('akinsho/toggleterm.nvim')
+Plug('machakann/vim-sandwich')
+Plug('milisims/nvim-luaref')
+Plug('rcarriga/nvim-notify')
+Plug('windwp/nvim-autopairs')
+Plug('markonm/traces.vim')
+Plug('szw/vim-maximizer')
+Plug('numToStr/Comment.nvim')
+Plug('iamcco/markdown-preview.nvim', { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
+Plug('andymass/vim-matchup')
+Plug('kyazdani42/nvim-tree.lua')
+Plug('RRethy/nvim-treesitter-endwise')
+
+vim.call('plug#end')
+
+-- Enable plugins with default configurarion
+
+vim.notify = require('notify')
+require('fidget').setup()
+require('nvim-autopairs').setup({ check_ts = true })
+require('Comment').setup()
+require('nvim-treesitter.configs').setup({
+  ensure_installed = 'maintained',
+  highlight = { enable = true },
+  indent = { enable = true },
+  matchup = {
+    enable = true,
+  },
+  endwise = {
+    enable = true,
+  },
+})
