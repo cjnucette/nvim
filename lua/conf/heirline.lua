@@ -3,8 +3,19 @@ if not heirline_ok then
   return
 end
 
-local set = vim.opt
+-- Autocommands
+vim.cmd([[
+augroup heirline
+    autocmd!
+    autocmd ColorScheme * lua require'heirline'.reset_highlights(); vim.cmd('luafile  ~/.config/nvim/lua/conf/heirline.lua')
+augroup END
+]])
+
+-- Abbreviations
 local api = vim.api
+local set = vim.opt
+
+-- Helper and Utilities
 local conditions = require('heirline.conditions')
 local utils = require('heirline.utils')
 local signs = require('utils').signs
@@ -18,42 +29,39 @@ set.cmdheight = 2
 -- statusline
 local colors = {
   folder = '#ff9e64',
+  red = utils.get_highlight('DiagnosticError').fg,
+  green = utils.get_highlight('String').fg,
+  blue = utils.get_highlight('Function').fg,
+  gray = utils.get_highlight('NonText').fg,
+  orange = utils.get_highlight('DiagnosticWarn').fg,
+  purple = utils.get_highlight('Statement').fg,
+  cyan = utils.get_highlight('Special').fg,
   diag = {
     warning = utils.get_highlight('DiagnosticWarn').fg,
     error = utils.get_highlight('DiagnosticError').fg,
-    information = utils.get_highlight('DiagnosticInfo').fg,
     hint = utils.get_highlight('DiagnosticHint').fg,
+    information = utils.get_highlight('DiagnosticInfo').fg,
   },
   git = {
-    del = utils.get_highlight('diffDelete').fg,
-    add = utils.get_highlight('diffAdd').fg,
-    change = utils.get_highlight('diffChange').fg,
+    removed = utils.get_highlight('diffDelete').fg,
+    added = utils.get_highlight('diffAdd').fg,
+    changed = utils.get_highlight('diffChange').fg,
   },
 }
 
 local Align = {
   provider = '%=',
-  hl = { bg = utils.get_highlight('Normal').bg }, -- ???
 }
 
-local Space = {
+local Space = utils.make_flexible_component(1, {
   provider = '  ',
-}
+}, { provider = ' ' })
+
 local Delimiter = {
   provider = ' ',
 }
 
-local Diagnostics = {
-  condition = conditions.has_diagnostics,
-
-  init = function(self)
-    self.diagnostics = {
-      error = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR }),
-      warning = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN }),
-      hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT }),
-      information = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO }),
-    }
-  end,
+local LongDiag = {
   {
     condition = function(self)
       return self.diagnostics['error'] > 0
@@ -120,6 +128,67 @@ local Diagnostics = {
   },
 }
 
+local ShortDiag = {
+  {
+    condition = function(self)
+      return self.diagnostics['error'] > 0
+    end,
+    {
+      provider = function()
+        return '·'
+      end,
+      hl = { fg = colors.diag.error },
+    },
+  },
+  {
+    condition = function(self)
+      return self.diagnostics['warning'] > 0
+    end,
+    {
+      provider = function()
+        return '·'
+      end,
+      hl = { fg = colors.diag.warning },
+    },
+  },
+  {
+    condition = function(self)
+      return self.diagnostics['information'] > 0
+    end,
+    {
+      provider = function()
+        return '·'
+      end,
+      hl = { fg = colors.diag.information },
+    },
+  },
+  {
+    condition = function(self)
+      return self.diagnostics['hint'] > 0
+    end,
+    {
+      provider = function()
+        return '·'
+      end,
+      hl = { fg = colors.diag.hint },
+    },
+  },
+}
+
+local Diagnostics = {
+  condition = conditions.has_diagnostics,
+
+  init = function(self)
+    self.diagnostics = {
+      error = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR }),
+      warning = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN }),
+      hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT }),
+      information = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO }),
+    }
+  end,
+  utils.make_flexible_component(1, LongDiag, { ShortDiag, Space }),
+}
+
 local ViMode = {
   init = function(self)
     self.mode = vim.fn.mode(1)
@@ -152,41 +221,82 @@ local ViMode = {
       end,
     }),
   },
-  provider = function(self)
-    return '--%2(' .. self.mode_names[self.mode][1]:upper() .. '%)--'
-  end,
+  utils.make_flexible_component(1, {
+    provider = function(self)
+      return '--' .. self.mode_names[self.mode][1]:upper() .. '--'
+    end,
+  }, {
+    provider = function(self)
+      return '-' .. self.mode_names[self.mode][2]:upper() .. '-'
+    end,
+  }),
 }
 
 local Git = {
-  condition = conditions.is_git_repo(),
+  condition = conditions.is_git_repo,
+
   init = function(self)
-    self.head = vim.g.coc_git_status
-    self.status = vim.b.coc_git_status
+    self.status_dict = vim.b.gitsigns_status_dict
+    self.has_changes = self.status_dict.added ~= 0 or self.status_dict.removed ~= 0 or self.status_dict.changed ~= 0
   end,
-  {
+
+  -- hl = { fg = colors.orange },
+
+  { -- git branch name
     provider = function(self)
-      return self.head
+      return ' ' .. self.status_dict.head
     end,
+    hl = { style = 'bold' },
   },
-  {
-    condition = function(self)
-      return self.status
-    end,
-    provider = function(self)
-      return ' | ' .. vim.trim(self.status)
-    end,
-  },
+  -- You could handle delimiters, icons and counts similar to Diagnostics
+  utils.make_flexible_component(1, {
+    {
+      condition = function(self)
+        return self.has_changes
+      end,
+      provider = ' | ',
+    },
+    {
+      provider = function(self)
+        local count = self.status_dict.added or 0
+        return count > 0 and ('+' .. count)
+      end,
+      hl = { fg = colors.git.added },
+    },
+    {
+      provider = function(self)
+        local count = self.status_dict.removed or 0
+        return count > 0 and ('-' .. count)
+      end,
+      hl = { fg = colors.git.removed },
+    },
+    {
+      provider = function(self)
+        local count = self.status_dict.changed or 0
+        return count > 0 and ('~' .. count)
+      end,
+      hl = { fg = colors.git.changed },
+    },
+  }, {
+    provider = '',
+  }),
 }
 
-local Ruler = {
+local Ruler = utils.make_flexible_component(1, {
   provider = 'Ln %l,Col %c',
-}
+}, {
+  provider = '%l,%c',
+})
 
-local TabStop = {
+local TabStop = utils.make_flexible_component(1, {
   provider = function()
     return 'Spaces: ' .. vim.bo.tabstop
   end,
-}
+}, {
+  provider = function()
+    return 'S:' .. vim.bo.tabstop
+  end,
+})
 
 local FileEncoding = {
   provider = function()
@@ -209,28 +319,29 @@ local FileFormat = {
 }
 
 local FileName = {
-  provider = function()
-    local filename = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':.')
+  init = function(self)
+    local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':.')
 
-    if filename == '' then
-      return '[No Name]'
-    end
-
-    if not conditions.width_percent_below(#filename, 0.50) then
-      filename = vim.fn.pathshorten(filename)
-    end
-
-    return filename
+    self.filename = fname ~= '' and fname or '[No Name]'
   end,
+  utils.make_flexible_component(1, {
+    provider = function(self)
+      return self.filename
+    end,
+  }, {
+    provider = function(self)
+      return vim.fn.pathshorten(self.filename)
+    end,
+  }),
+  -- hl = { bg = utils.get_highlight('Normal').bg }, -- ???
 }
 
 local FileIcon = {
   init = function(self)
     local devicons_ok, devicons = pcall(require, 'nvim-web-devicons')
-    if not devicons_ok then
-      return
-    end
-    local filename = api.nvim_buf_get_name(0)
+    if not devicons_ok then return end
+
+    local filename = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t')
     local extension = vim.fn.fnamemodify(filename, ':e')
     self.icon, self.icon_color = devicons.get_icon_color(filename, extension, { default = true })
   end,
@@ -269,7 +380,7 @@ local FileType = {
 local LSPActive = {
   condition = conditions.lsp_attached,
 
-  provider = ' ',
+  provider = '',
 }
 
 local Spell = {
@@ -281,45 +392,9 @@ local Spell = {
     for _, l in ipairs(vim.opt.spelllang:get()) do
       lang = lang .. l
     end
-    return '  Spell: ' .. lang
+    -- return '  Spell: ' .. lang
+    return '  SPELL '
   end,
-}
-
--- local ScrollBar = {
---   static = {
---     sbar = { '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█' },
---   },
---   provider = function(self)
---     local curr_line = api.nvim_win_get_cursor(0)[1]
---     local lines = api.nvim_buf_line_count(0)
---     local i = math.floor(curr_line / lines * (#self.sbar - 1)) + 1
---
---     return string.rep(self.sbar[i], 2)
---   end,
--- }
-
-local DefaultStatusLine = {
-  Delimiter,
-  Diagnostics,
-  ViMode,
-  Space,
-  Git,
-  Space,
-  Align,
-  Space,
-  Ruler,
-  Space,
-  TabStop,
-  Space,
-  FileEncoding,
-  Space,
-  FileFormat,
-  Space,
-  FileIcon,
-  FileType,
-  LSPActive,
-  Spell,
-  Delimiter,
 }
 
 local Terminal = {
@@ -337,6 +412,8 @@ local TerminalStatusLine = {
     return conditions.buffer_matches({ buftype = { 'terminal' } })
   end,
 
+  Delimiter,
+  { condition = conditions.is_active, ViMode, Space },
   Terminal,
 }
 
@@ -355,6 +432,7 @@ local ExplorerStatusLine = {
     return vim.bo.ft == 'coc-explorer' or vim.bo.ft == 'NvimTree'
   end,
 
+  Delimiter,
   Explorer,
 }
 
@@ -374,7 +452,10 @@ local PackagerManagerStatusLine = {
     -- return conditions.buffer_matches({ filetype = { 'vim-plug', 'packer' } }) -- nop
   end,
 
+  Delimiter,
   PackagerManager,
+  Ruler,
+  Delimiter,
 }
 
 local Http = {
@@ -392,9 +473,34 @@ local HttpStatusLine = {
     return vim.bo.ft == 'httpResult'
   end,
 
+  Delimiter,
   Http,
+  Ruler,
+  Delimiter,
 }
 
+local DefaultStatusLine = {
+  Delimiter,
+  Diagnostics,
+  ViMode,
+  Space,
+  Git,
+  Delimiter,
+  Align,
+  FileName,
+  Align,
+  Delimiter,
+  Ruler,
+  Space,
+  TabStop,
+  Space,
+  utils.make_flexible_component(1, { FileEncoding, Space }, { provider = '' }),
+  utils.make_flexible_component(1, { FileFormat, Space }, { provider = '' }),
+  utils.make_flexible_component(1, { FileIcon, FileType, Delimiter }, FileIcon),
+  LSPActive,
+  Spell,
+  Delimiter,
+}
 local InactiveStatusLine = {
   condition = function()
     return not conditions.is_active()
@@ -409,20 +515,20 @@ local InactiveStatusLine = {
 
 local Statusline = {
   hl = function()
-    -- if not conditions.is_active() then
-    --   return {
-    --     fg = utils.get_highlight('Statusline').fg,
-    --     bg = utils.get_highlight('Statusline').bg,
-    --   }
-    -- else
-    return {
-      fg = utils.get_highlight('StatuslineNC').fg,
-      bg = utils.get_highlight('StatuslineNC').bg,
-    }
-    -- end
+    if conditions.is_active() then
+      return {
+        fg = utils.get_highlight('StatuslineNC').fg,
+        bg = utils.get_highlight('Statusline').bg,
+      }
+    else
+      return {
+        fg = utils.get_highlight('StatuslineNC').fg,
+        bg = utils.get_highlight('StatuslineNC').bg,
+      }
+    end
   end,
 
-  stop_at_first = true,
+  init = utils.pick_child_on_condition,
 
   TerminalStatusLine,
   ExplorerStatusLine,
@@ -431,4 +537,5 @@ local Statusline = {
   InactiveStatusLine,
   DefaultStatusLine,
 }
+
 heirline.setup(Statusline)

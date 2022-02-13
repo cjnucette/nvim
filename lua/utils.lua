@@ -1,3 +1,4 @@
+local fn = vim.fn
 local M = {}
 
 M.map = function(mode, lhs, rhs, opts)
@@ -17,6 +18,10 @@ M.signs = {
 
 M.capitalize = function(str)
   return (str:gsub('^%l', string.upper))
+end
+
+M.get_color = function(hlgroup, attr)
+  return fn.synIDattr(fn.synIDtrans(fn.hlID(hlgroup)), attr, 'gui')
 end
 
 return M

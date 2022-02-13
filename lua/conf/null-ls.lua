@@ -3,21 +3,29 @@ if not null_ls_ok then
   return
 end
 
-local prettier_conf = function()
-  local options = {}
+local is_cfg_present = function(cfg_filename)
+  return vim.fn.filereadable(vim.fn.expand(cfg_filename)) == 1
+end
 
-  if
-    vim.fn.filereadable('./.prettierrc') == 0
-    and vim.fn.filereadable('./.prettierrc.js') == 0
-    and vim.fn.filereadable('./.prettierrc.cjs') == 0
-    and vim.fn.filereadable('./.prettierrc.json') == 0
-    and vim.fn.filereadable('./.prettier.config.js') == 0
-    and vim.fn.filereadable('./.prettier.config.cjs') == 0
-    and (
-      vim.fn.filereadable('./package.json') == 1
-      and vim.fn.match(vim.fn.readfile('./package.json'), '"prettier": {') == -1
-    )
-  then
+local is_using_prettierrc = function()
+  return is_cfg_present('./.prettierrc')
+    or is_cfg_present('./.prettierrc.js')
+    or is_cfg_present('./.prettierrc.cjs')
+    or is_cfg_present('./.prettierrc.json')
+    or is_cfg_present('./.prettier.config.js')
+    or is_cfg_present('./.prettier.config.cjs')
+    or (is_cfg_present('./package.json') and vim.fn.match(vim.fn.readfile('./package.json'), '"prettier": {') == 1)
+end
+
+local prettier_conf = function()
+  local options = {
+    disabled_filetypes = {'html'},
+    condition = function(utils)
+      return not utils.root_has_file({'deno.json', 'deno.jsonc'})
+    end
+  }
+
+  if not is_using_prettierrc() then
     options.extra_args = {
       '--single-quote',
       'true',
@@ -45,9 +53,9 @@ null_ls.setup({
     end
   end,
   sources = {
-    null_ls.builtins.formatting.stylua.with({
-      extra_args = { '-', '--indent-width', '2', '--indent-type', 'Spaces', '--quote-style', 'autoPreferSingle' },
-    }),
+    -- null_ls.builtins.formatting.stylua.with({
+    --   extra_args = { '-', '--indent-width', '2', '--indent-type', 'Spaces', '--quote-style', 'autoPreferSingle' },
+    -- }),
     null_ls.builtins.formatting.prettier.with(prettier_conf()),
   },
 })

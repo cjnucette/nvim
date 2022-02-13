@@ -1,4 +1,5 @@
-local signs = require("utils").signs
+local signs = require('utils').signs
+local map = require('utils').map
 
 vim.diagnostic.config({
   underline = true,
@@ -7,8 +8,8 @@ vim.diagnostic.config({
   severity_sort = true,
   float = {
     show_header = false,
-    source = "always",
-    border = "single",
+    source = 'always',
+    border = 'single',
   },
   virtual_text = false,
   -- virtual_text = {
@@ -21,10 +22,10 @@ vim.diagnostic.config({
 })
 
 -- Diagnostic Signs
-vim.fn.sign_define("DiagnosticSignError", { text = signs.error, texthl = "DiagnosticSignError", numhl = "" })
-vim.fn.sign_define("DiagnosticSignWarning", { text = signs.warning, texthl = "DiagnosticSignWarning", numhl = "" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = signs.info, texthl = "DiagnosticSignInfo", numhl = "" })
-vim.fn.sign_define("DiagnosticSignHint", { text = signs.hint, texthl = "DiagnosticSignHint", numhl = "" })
+vim.fn.sign_define('DiagnosticSignError', { text = signs.error, texthl = 'DiagnosticSignError', numhl = '' })
+vim.fn.sign_define('DiagnosticSignWarning', { text = signs.warning, texthl = 'DiagnosticSignWarning', numhl = '' })
+vim.fn.sign_define('DiagnosticSignInfo', { text = signs.information, texthl = 'DiagnosticSignInfo', numhl = '' })
+vim.fn.sign_define('DiagnosticSignHint', { text = signs.hint, texthl = 'DiagnosticSignHint', numhl = '' })
 
 -- vim.cmd([[
 --   augroup show_line_diagnostics
@@ -33,11 +34,8 @@ vim.fn.sign_define("DiagnosticSignHint", { text = signs.hint, texthl = "Diagnost
 --   augroup END
 -- ]])
 
-
 -- mappings
-local opts = {silent = true, noremap = true}
-vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', '<leader>da', vim.diagnostic.setloclist, opts)
-vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float, opts)
-
+map('n', '<leader>dn', vim.diagnostic.goto_next)
+map('n', '<leader>dp', vim.diagnostic.goto_prev)
+map('n', '<leader>da', vim.diagnostic.setloclist)
+map('n', '<leader>ds', vim.diagnostic.open_float)

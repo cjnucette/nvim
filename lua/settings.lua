@@ -12,6 +12,7 @@ vim.g.Hexokinase_optInPatterns = {
   "colour_names",
 }
 vim.g.Hexokinase_highlighters = { "virtual", "foreground" }
+vim.g.Hexokinase_ftEnabled = {'vim','lua','css', 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}
 
 -- vim-markdown
 vim.g.vim_markdown_folding_disabled = true
@@ -66,20 +67,6 @@ vim.g.netrw_browse_split = 2
 vim.g.netrw_winsize = 30
 vim.g.loaded_netrw = true
 vim.g.loaded_netrwPlugin = true
-
--- indend-blankline
-if vim.opt.diff:get() then
-  vim.g.indent_blakline_enabled = false
-end
-
-vim.g.indent_blankline_filetype_exclude = { "diff", "man", "vim-plug", "help", "markdown", "text", "coc-explorer" }
-vim.g.indent_blankline_buftype_exclude = { "terminal" }
-vim.g.indent_blankline_use_treesitter = true
-vim.g.indent_blankline_show_first_indent_level = true
-vim.g.indent_blankline_show_current_context = true
-vim.g.indent_blankline_context_highlight = "Function"
-vim.g.indent_blankline_context_patterns = { "function", "class", "method" }
-vim.g.indent_blankline_char = "▏"
 
 -- vim-rooter
 vim.g.rooter_manual_only = 1

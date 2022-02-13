@@ -18,7 +18,7 @@ map('n', '<leader>u', 'vb~A')
 --various searches
 map('n', '<leader>gh', "<cmd>h <c-r>=expand('<cword>')<cr><cr>")
 map('n', '<leader>*', '<cmd>grep -R <cword> * --exclude-dir={node_modules,.git}<cr><cr>')
-map('n', '<leader>gr', "<cmd>CocSearch <c-r>=expand('<cword>')<cr><cr>")
+-- map('n', '<leader>gr', "<cmd>CocSearch <c-r>=expand('<cword>')<cr><cr>")
 map('n', '<leader>gg', "<cmd>Rg <c-r>=expand('<cword>')<cr><cr>")
 
 -- Searches for the text last replaced and repeat the replace.
@@ -55,7 +55,3 @@ map('v', '<c-k>', "<cmd>m '<-2<cr>gv=gv")
 vim.cmd([[
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 ]])
--- map('n',
--- "<F10>",
--- [[:echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>]],
--- opts)

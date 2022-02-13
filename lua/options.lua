@@ -24,9 +24,9 @@ set.ignorecase = true
 set.smartcase = true
 set.incsearch = true
 set.list = true
-set.listchars = { tab = '>-', space = '·' }
---set.listchars = { tab = '>-', trail = '·' }
-set.clipboard = 'unnamedplus'
+-- set.listchars = { tab = '>-', space = '·' }
+set.listchars = { tab = '>-', trail = '·' }
+set.clipboard:append({'unnamed', 'unnamedplus'})
 set.scrolloff = 3
 set.autoread = true
 -- opt.fillchars:append('eob:\')

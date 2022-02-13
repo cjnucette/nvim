@@ -11,12 +11,13 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '/home/cjnucette/.config/nvim/plugged')
 -- dependencies
--- Plug('MunifTanjim/nui.nvim') -- package-info dependency
+Plug('MunifTanjim/nui.nvim') -- package-info dependency
 Plug('nvim-lua/plenary.nvim') -- Telescope dependecy
 Plug('kyazdani42/nvim-web-devicons') -- various packages
 
 -- Treesitter
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+Plug('RRethy/nvim-treesitter-endwise')
 
 -- themes
 Plug('marko-cerovac/material.nvim')
@@ -46,6 +47,10 @@ Plug('rebelot/heirline.nvim')
 Plug('nvim-telescope/telescope.nvim')
 Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'make' })
 
+-- git
+Plug('lewis6991/gitsigns.nvim')
+Plug('tpope/vim-fugitive')
+
 -- others
 Plug('akinsho/bufferline.nvim')
 Plug('akinsho/toggleterm.nvim')
@@ -59,7 +64,10 @@ Plug('numToStr/Comment.nvim')
 Plug('iamcco/markdown-preview.nvim', { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
 Plug('andymass/vim-matchup')
 Plug('kyazdani42/nvim-tree.lua')
-Plug('RRethy/nvim-treesitter-endwise')
+Plug('lukas-reineke/indent-blankline.nvim')
+Plug('vuki656/package-info.nvim')
+Plug('rrethy/vim-hexokinase', { ['do'] = 'make hexokinase' })
+Plug('karb94/neoscroll.nvim')
 
 vim.call('plug#end')
 
@@ -69,14 +77,5 @@ vim.notify = require('notify')
 require('fidget').setup()
 require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
-require('nvim-treesitter.configs').setup({
-  ensure_installed = 'maintained',
-  highlight = { enable = true },
-  indent = { enable = true },
-  matchup = {
-    enable = true,
-  },
-  endwise = {
-    enable = true,
-  },
-})
+require('gitsigns').setup()
+require('neoscroll').setup()
