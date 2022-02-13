@@ -1,0 +1,136 @@
+/*
+  Inspired by Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+:root {
+  /* type scale */
+  --font-size: 100%;
+  --ratio: 1.333;
+  --ratio-alt: 1.68; /* golden ratio */
+  --h4: calc(var(--font-size) * var(--ratio));
+  --h3: calc(var(--h4) * var(--ratio));
+  --h2: calc(var(--h3) * var(--ratio));
+  --h1: calc(var(--h2) * var(--ratio));
+  --shw-x-offset: 2px;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  line-height: calc(1em + 0.5rem); /* not in body because ems don't inherit well */
+  margin: 0;
+}
+
+html {
+  font-size: 1rem;
+}
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@supports (font-size-adjust: 1) {
+  body {
+    font-size-adjust: 0.5;
+  }
+}
+
+h4 {
+  font-size: var(--h4);
+}
+h3 {
+  font-size: var(--h3);
+}
+h2 {
+  font-size: var(--h2);
+}
+h1 {
+  font-size: var(--h1);
+}
+
+p,
+li,
+dt,
+dd,
+blockquote,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+}
+
+:where(ul[class], ol[class]) {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Utilities */
+.wrapper {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 60rem;
+}
+
+.flow > * + * {
+  margin-top: var(--flow-spacer, 1rem);
+}
+
+.shadow {
+  box-shadow: var(--shw-x-offset) calc(var(--shw-x-offset) * 2)
+    calc(var(--shw-x-offset) * 2) hsl(0deg 0% 0% / 0.5);
+}
+
+/* Create a root stacking context */
+/* This needs to be adjusted to meet the js framework being used. */
+#app,
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Your styles */
