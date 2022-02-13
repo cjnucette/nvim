@@ -2,6 +2,10 @@ local lspinstaller_ok, lspinstaller = pcall(require, 'nvim-lsp-installer')
 if not lspinstaller_ok then
   return
 end
+
+lspinstaller.settings({
+  install_root_dir = vim.fn.stdpath("config") .. "/lsp_servers",
+})
 require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
 
 local map = require('utils').map
