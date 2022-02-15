@@ -515,17 +515,19 @@ local InactiveStatusLine = {
 
 local Statusline = {
   hl = function()
-    if conditions.is_active() then
+    -- if conditions.is_active() then
+    --   return {
+    --     -- fg = utils.get_highlight('Statusline').fg,
+    --     -- bg = utils.get_highlight('Statusline').bg,
+    --   }
+    -- else
       return {
-        fg = utils.get_highlight('StatuslineNC').fg,
-        bg = utils.get_highlight('Statusline').bg,
+        fg = utils.get_highlight('Comment').fg,
+        bg = utils.get_highlight('Comment').bg,
+        -- fg = utils.get_highlight('StatuslineNC').fg,
+        -- bg = utils.get_highlight('StatuslineNC').bg,
       }
-    else
-      return {
-        fg = utils.get_highlight('StatuslineNC').fg,
-        bg = utils.get_highlight('StatuslineNC').bg,
-      }
-    end
+    -- end
   end,
 
   init = utils.pick_child_on_condition,
