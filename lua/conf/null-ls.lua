@@ -19,7 +19,6 @@ end
 
 local prettier_conf = function()
   local options = {
-    disabled_filetypes = {'html'},
     condition = function(utils)
       return not utils.root_has_file({'deno.json', 'deno.jsonc'})
     end
