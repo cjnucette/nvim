@@ -21,12 +21,13 @@ nvimtree.setup({
     enable = true,
     icons = {
       hint = signs.hint,
-      info = signs.info,
+      info = signs.information,
       warning = signs.warning,
       error = signs.error,
     },
   },
   view = {
+    width = 30,
     mappings = {
       list = list,
     },
