@@ -69,6 +69,9 @@ Plug('vuki656/package-info.nvim')
 Plug('rrethy/vim-hexokinase', { ['do'] = 'make hexokinase' })
 Plug('karb94/neoscroll.nvim')
 
+-- Development
+Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')
+
 vim.call('plug#end')
 
 -- Enable plugins with default configurarion
@@ -77,5 +80,4 @@ vim.notify = require('notify')
 require('fidget').setup()
 require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
-require('gitsigns').setup()
 require('neoscroll').setup()
