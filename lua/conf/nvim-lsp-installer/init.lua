@@ -75,12 +75,18 @@ local custom_server_options = {
           disable = {
             'different-requires',
           },
-          globals = { 'vim' },
+          globals = { 'vim', 'P', 'R'},
         },
       },
     }
   end,
   ['tsserver'] = function(opts)
+    opts.on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
+      on_attach(client, bufnr)
+    end
+  end,
+  ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
       on_attach(client, bufnr)
@@ -115,6 +121,19 @@ local custom_server_options = {
       },
     }
   end,
+  ['yamlls'] = function(opts)
+    opts.settings = {
+      yaml = {
+        schemas = {
+          {
+            fileMatch = {"docker-compose.yml", 'docker-compose.yaml'},
+            url = "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"
+          }
+        }
+      }
+    }
+
+  end
 }
 
 lspinstaller.on_server_ready(function(server)
