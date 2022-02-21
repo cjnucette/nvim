@@ -15,10 +15,11 @@ require('conf/bufferline')
 require('conf/toggleterm')
 require('conf/nvim-cmp')
 require('conf/telescope')
-require('conf/nvim-tree')
 require('conf/heirline')
 require('conf/indent-blankline')
 require('conf/package-info')
+require('conf/gitsigns')
+require('conf/color-converter')
 require('colorscheme')
 
 -- prints colorgroup for the word under the cursor

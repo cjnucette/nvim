@@ -46,6 +46,7 @@ Plug('rebelot/heirline.nvim')
 -- telescope
 Plug('nvim-telescope/telescope.nvim')
 Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'make' })
+Plug('nvim-telescope/telescope-file-browser.nvim')
 
 -- git
 Plug('lewis6991/gitsigns.nvim')
@@ -63,11 +64,11 @@ Plug('szw/vim-maximizer')
 Plug('numToStr/Comment.nvim')
 Plug('iamcco/markdown-preview.nvim', { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
 Plug('andymass/vim-matchup')
-Plug('kyazdani42/nvim-tree.lua')
 Plug('lukas-reineke/indent-blankline.nvim')
 Plug('vuki656/package-info.nvim')
 Plug('rrethy/vim-hexokinase', { ['do'] = 'make hexokinase' })
 Plug('karb94/neoscroll.nvim')
+Plug('NTBBloodbath/color-converter.nvim')
 
 -- Development
 Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')

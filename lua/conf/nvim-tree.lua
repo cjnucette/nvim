@@ -1,8 +1,7 @@
 local nvimtree = require('nvim-tree')
-local map = vim.keymap.set
+local map = require('utils').map
 local signs = require('utils').signs
 local tree_cb = require('nvim-tree.config').nvim_tree_callback
-local opts = { silent = true, noremap = true }
 
 local list = {
   { key = 'l', cb = tree_cb('edit') },
@@ -35,6 +34,6 @@ nvimtree.setup({
 })
 
 -- mappings
-map('n', '<leader>e', ':NvimTreeToggle<CR>', opts)
-map('n', '<leader>er', ':NvimTreeRefresh<CR>', opts)
-map('n', '<leader>en', ':NvimTreeFindFile<CR>', opts)
+map('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
+map('n', '<leader>er', '<cmd>NvimTreeRefresh<CR>')
+map('n', '<leader>en', '<cmd>NvimTreeFindFile<CR>')

@@ -1,5 +1,4 @@
-local map = vim.keymap.set
-local opts = { silent = true, noremap = true }
+local map = require('utils').map
 
 -- settings
 require('telescope').setup({
@@ -15,26 +14,12 @@ require('telescope').setup({
       override_file_sorter = true,
       case_mode = 'smart_case'
     },
---    bookmarks = {
---      selected_browser = 'google_chrome',
---      url_open_command = 'xdg-open',
---    },
   },
 })
 
--- mappings
-map('n', '<C-p>', ':lua require("conf/telescope").project_files()<CR>', opts)
-map('n', '<leader>tb', '<cmd>Telescope buffers<CR>', opts)
-map('n', '<leader>tr', '<cmd>Telescope neoclip<CR>', opts)
-map('n', '<leader>th', '<cmd>Telescope help_tags<CR>', opts)
-map('n', '<leader>te', '<cmd>Telescope file_browser<CR>', opts)
-map('n', '<leader>tg', '<cmd>Telescope live_grep<CR>', opts)
-map('n', '<leader>tn', '<cmd>lua require("conf/telescope").notes()<CR>', opts)
-map('n', '<leader>tf', '<cmd>lua require("conf/telescope").file_explorer()<CR>', opts)
-map('n', '<leader>tc', '<cmd>lua require("conf/telescope").nvim_config()<CR>', opts)
-
 -- extensions
 require('telescope').load_extension('fzf')
+require('telescope').load_extension('file_browser')
 -- require('telescope').load_extension('projects')
 -- require('telescope').load_extension('coc')
 -- require('telescope').load_extension('neoclip')
@@ -69,12 +54,14 @@ function M.nvim_config()
   require('telescope.builtin').find_files(opts)
 end
 
-function M.file_explorer()
-  require('telescope.builtin').file_browser({
-    prompt_title = ' File Explorer ',
-    path_display = { 'shorten' },
-    cwd = '~',
-  })
-end
+-- mappings
+map('n', '<C-p>', '<cmd>lua require("conf/telescope").project_files()<cr>')
+map('n', '<leader>tb', '<cmd>Telescope buffers<CR>')
+map('n', '<leader>tr', '<cmd>Telescope neoclip<CR>')
+map('n', '<leader>th', '<cmd>Telescope help_tags<CR>')
+map('n', '<leader>tf', '<cmd>Telescope file_browser<CR>')
+map('n', '<leader>tg', '<cmd>Telescope live_grep<CR>')
+map('n', '<leader>tn', '<cmd>lua require("conf/telescope").notes()<cr>')
+map('n', '<leader>tc', '<cmd>lua require("conf/telescope").nvim_config()<cr>')
 
 return M
