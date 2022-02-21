@@ -328,10 +328,26 @@ local FileName = {
     provider = function(self)
       return self.filename
     end,
+    {
+      condition = function()
+        return conditions.buffer_matches({ filetype = { 'markdown', 'text' } })
+      end,
+      provider = function()
+        return ' - ' .. vim.fn.wordcount().words .. ' words'
+      end
+    }
   }, {
     provider = function(self)
       return vim.fn.pathshorten(self.filename)
     end,
+    {
+      condition = function()
+        return conditions.buffer_matches({ filetype = { 'markdown', 'text' } })
+      end,
+      provider = function()
+        return ':' .. vim.fn.wordcount().words
+      end
+    }
   }),
   -- hl = { bg = utils.get_highlight('Normal').bg }, -- ???
 }
@@ -428,8 +444,7 @@ local Explorer = {
 }
 local ExplorerStatusLine = {
   condition = function()
-    -- return conditions.buffer_matches({ filetype = { 'coc-explorer', 'NvimTree' } })
-    return vim.bo.ft == 'coc-explorer' or vim.bo.ft == 'NvimTree'
+    return conditions.buffer_matches({ filetype = { 'coc-explorer', 'NvimTree' } })
   end,
 
   Delimiter,
@@ -521,12 +536,12 @@ local Statusline = {
     --     -- bg = utils.get_highlight('Statusline').bg,
     --   }
     -- else
-      return {
+    return {
         fg = utils.get_highlight('Comment').fg,
         bg = utils.get_highlight('Comment').bg,
         -- fg = utils.get_highlight('StatuslineNC').fg,
         -- bg = utils.get_highlight('StatuslineNC').bg,
-      }
+    }
     -- end
   end,
 
