@@ -20,6 +20,7 @@ require('conf/indent-blankline')
 require('conf/package-info')
 require('conf/gitsigns')
 require('conf/color-converter')
+require('conf/emmet')
 require('colorscheme')
 
 -- prints colorgroup for the word under the cursor

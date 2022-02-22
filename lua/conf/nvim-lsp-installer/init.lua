@@ -3,10 +3,12 @@ if not lspinstaller_ok then
   return
 end
 
+-- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
+
 lspinstaller.settings({
   install_root_dir = vim.fn.stdpath("config") .. "/lsp_servers",
 })
-require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
+
 
 local map = require('utils').map
 
@@ -75,11 +77,18 @@ local custom_server_options = {
           disable = {
             'different-requires',
           },
-          globals = { 'vim', 'P', 'R'},
+          globals = { 'vim', 'P', 'R', 'it', 'describe', 'before_each', 'after_each'},
         },
+        format = {
+          enable = true,
+        },
+        runtime = {
+          path = {'?.lua', '?/init.lua'}
+        }
       },
     }
   end,
+
   ['tsserver'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false

@@ -40,6 +40,9 @@ Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-vsnip')
 
+-- emmet (lsp versions suck)
+Plug('mattn/emmet-vim')
+
 -- statusline
 Plug('rebelot/heirline.nvim')
 
