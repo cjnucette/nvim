@@ -28,7 +28,14 @@ local handlers = {
   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
 }
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local setup_capabilities = function ()
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+  return capabilities
+end
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(setup_capabilities())
 
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -72,6 +79,11 @@ local custom_server_options = {
     end
     opts.settings = {
       Lua = {
+        runtime = {
+          version = 'LuaJIT',
+          path = vim.split(package.path, ';')
+          -- path = {'?.lua', '?/init.lua'}
+        },
         diagnostics = {
           enable = true,
           disable = {
@@ -82,8 +94,14 @@ local custom_server_options = {
         format = {
           enable = true,
         },
-        runtime = {
-          path = {'?.lua', '?/init.lua'}
+        completion = {
+          callSnippet = 'Replace',
+        },
+        workspace = {
+          library = {
+            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          }
         }
       },
     }
