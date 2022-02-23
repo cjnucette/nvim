@@ -28,11 +28,11 @@ end
 -- Set colorscheme
 
 -- theme styles: oceanic | deep ocean | palenight | lighter | darker
-vim.g.material_italic_comments = true
-vim.g.material_italic_keywords = true
-vim.g.material_italic_functions = true
-vim.g.material_style = 'palenight'
-cmd([[colorscheme material]])
+-- vim.g.material_italic_comments = true
+-- vim.g.material_italic_keywords = true
+-- vim.g.material_italic_functions = true
+-- vim.g.material_style = 'palenight'
+-- cmd([[colorscheme material]])
 
 -- vim.g.onedark_hide_endofbuffer=1
 -- vim.g.onedark_terminal_italics=1
@@ -53,6 +53,6 @@ cmd([[colorscheme material]])
 -- vim.g.tokyonight_italic_comments = true
 -- cmd([[colorscheme tokyonight]])
 
--- vim.g.nord_contrast = true
--- vim.g.nord_borders = true
--- cmd([[colorscheme nord]])
+vim.g.nord_contrast = true
+vim.g.nord_borders = true
+cmd([[colorscheme nord]])
