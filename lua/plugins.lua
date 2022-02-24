@@ -30,7 +30,6 @@ Plug('neovim/nvim-lspconfig')
 Plug('williamboman/nvim-lsp-installer')
 Plug('jose-elias-alvarez/null-ls.nvim')
 Plug('j-hui/fidget.nvim')
-Plug('brymer-meneses/grammar-guard.nvim') -- requires both lspconfig and lsp-installer
 
 -- completion and snippets
 Plug('hrsh7th/nvim-cmp')
