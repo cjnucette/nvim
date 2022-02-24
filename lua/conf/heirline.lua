@@ -396,7 +396,8 @@ local FileType = {
 local LSPActive = {
   condition = conditions.lsp_attached,
 
-  provider = '',
+  -- provider = '',
+  provider = '',
 }
 
 local Spell = {
@@ -411,6 +412,17 @@ local Spell = {
     -- return '  Spell: ' .. lang
     return '  SPELL '
   end,
+}
+
+local LiveServer = {
+  condition = function()
+    return conditions.buffer_matches({filetype = {'css', 'html'}})
+  end,
+  {
+    provider = function()
+      return vim.g.live_server and '   ' or '  睊'
+    end,
+  }
 }
 
 local Terminal = {
@@ -514,6 +526,7 @@ local DefaultStatusLine = {
   utils.make_flexible_component(1, { FileIcon, FileType, Delimiter }, FileIcon),
   LSPActive,
   Spell,
+  LiveServer,
   Delimiter,
 }
 local InactiveStatusLine = {

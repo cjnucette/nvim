@@ -41,10 +41,30 @@ require('toggleterm').setup({
 local Terminal = require('toggleterm.terminal').Terminal
 local node = Terminal:new({ cmd = 'node', hidden = true })
 local lazygit = Terminal:new({ cmd = 'lazygit', hidden = true })
+local vite = Terminal:new({
+  cmd = 'vite --open --host',
+  hidden = true,
+  on_open = function ()
+    vim.g.live_server = true
+  end,
+  on_exit = function ()
+    vim.g.live_server = nil
+  end,
+  close_on_exit = true,
+})
 
 function _G.nodeToggle()
   node:toggle()
 end
+
 function _G.lazygitToggle()
   lazygit:toggle()
 end
+
+function _G.live_server()
+  vite:toggle()
+end
+
+require('utils').map('n','<A-l>', live_server)
+require('utils').map('n','<A-n>', nodeToggle)
+require('utils').map('n','<A-g>', lazygitToggle)
