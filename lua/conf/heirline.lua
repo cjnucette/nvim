@@ -404,23 +404,27 @@ local Spell = {
   condition = function()
     return vim.wo.spell
   end,
-  provider = function()
-    local lang = ''
-    for _, l in ipairs(vim.opt.spelllang:get()) do
-      lang = lang .. l
-    end
-    -- return '  Spell: ' .. lang
-    return '  SPELL '
-  end,
+  Space,
+  {
+    provider = function()
+      local lang = ''
+      for _, l in ipairs(vim.opt.spelllang:get()) do
+        lang = lang .. l
+      end
+      -- return '  Spell: ' .. lang
+      return 'SPELL'
+    end,
+  }
 }
 
 local LiveServer = {
   condition = function()
     return conditions.buffer_matches({filetype = {'css', 'html'}})
   end,
+  Space,
   {
     provider = function()
-      return vim.g.live_server and '   ' or '  睊'
+      return vim.g.live_server and ' ' or '睊'
     end,
   }
 }
