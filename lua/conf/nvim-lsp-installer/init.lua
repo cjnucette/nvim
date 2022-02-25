@@ -6,11 +6,10 @@ end
 -- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
 
 lspinstaller.settings({
-  install_root_dir = vim.fn.stdpath("config") .. "/lsp_servers",
+  install_root_dir = vim.fn.stdpath('config') .. '/lsp_servers',
 })
 
-
-local map = require('utils').map
+local map = require("utils").map
 
 local border = {
   { '╭', 'FloatBorder' },
@@ -28,7 +27,7 @@ local handlers = {
   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
 }
 
-local setup_capabilities = function ()
+local setup_capabilities = function()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -47,7 +46,7 @@ local on_attach = function(client, bufnr)
   map('n', 'gT', vim.lsp.buf.type_definition, opts)
   map('n', 'gI', vim.lsp.buf.implementation, opts)
   map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-  map('n', '<leader>f', vim.lsp.buf.formatting, opts)
+  map('n', '<leader>f', '<cmd>Format<cr>', opts)
   map('n', '<F2>', vim.lsp.buf.rename, opts)
   map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', opts)
 
@@ -58,6 +57,8 @@ local on_attach = function(client, bufnr)
         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
       augroup END
     ]])
+
+    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()']])
   end
 
   if client.resolved_capabilities.document_highlight then
@@ -75,6 +76,7 @@ local custom_server_options = {
   ['sumneko_lua'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = true
+      client.resolved_capabilities.document_range_formatting = true
       on_attach(client, bufnr)
     end
     opts.settings = {
@@ -89,7 +91,7 @@ local custom_server_options = {
           disable = {
             'different-requires',
           },
-          globals = { 'vim', 'P', 'R', 'it', 'describe', 'before_each', 'after_each'},
+          globals = { 'vim', 'P', 'R', 'it', 'describe', 'before_each', 'after_each' },
         },
         format = {
           enable = true,
@@ -102,6 +104,9 @@ local custom_server_options = {
             [vim.fn.expand('$VIMRUNTIME/lua')] = true,
             [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
           }
+        },
+        misc = {
+          parameters = '--preview'
         }
       },
     }
@@ -110,18 +115,21 @@ local custom_server_options = {
   ['tsserver'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
+      client.resolved_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
   end,
   ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
+      client.resolved_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
   end,
   ['jsonls'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
+      client.resolved_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
     opts.settings = {
@@ -153,8 +161,8 @@ local custom_server_options = {
       yaml = {
         schemas = {
           {
-            fileMatch = {"docker-compose.yml", 'docker-compose.yaml'},
-            url = "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"
+            fileMatch = { 'docker-compose.yml', 'docker-compose.yaml' },
+            url = 'https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'
           }
         }
       }
