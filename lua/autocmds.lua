@@ -1,80 +1,79 @@
-local cmd = vim.cmd
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
 
--- Highlight selection on yank
-cmd [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-  augroup end
-]]
+augroup('YankHighlight', {})
+autocmd('TextYankPost', { group = 'YankHighlight', pattern = '*', callback = function() vim.highlight.on_yank() end})
 
--- Remap escape to leave terminal mode
-cmd [[
-  augroup Terminal
-    autocmd!
-    au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
-    au TermOpen * set nonu
-  augroup end
-]]
-
-cmd [[
-  augroup center_buffer_remember_cursor_pos
-    autocmd!
-    autocmd BufRead * normal zz
-    autocmd VimResized * :wincmd =
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-  augroup END
-]]
-
--- close nvim if coc-explorer is the last buffer
-cmd [[
-augroup close_cocexplorer
-  autocmd!
-  autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif 
-  autocmd BufEnter * if bufname('#') =~ 'coc-explorer' && bufname('%') !~ 'coc-explorer' && winnr('$') > 1 | execute "normal \<C-^>" | endif
-augroup END
-]]
-
-cmd [[
-augroup ejs
-  autocmd!
-  autocmd BufNewFile,BufRead *.ejs set filetype=html
-augroup END
-]]
-
-cmd [[
-augroup fix_devicon_color
-  autocmd!
-  autocmd ColorScheme * lua require('nvim-web-devicons').setup();
-augroup END
-]]
-
-cmd [[
-augroup goyo_limelight
-  autocmd!
-  autocmd User GoyoEnter Limelight
-  autocmd User GoyoLeave Limelight!
-augroup END
-]]
-
--- depends on pandoc (https://pandoc.org) be intalled
-cmd [[
-augroup read_word_docs
-  autocmd!
-  autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt silent %!pandoc "%" -tplain -o /dev/stdout
-augroup END
-]]
-
-cmd [[
-augroup refresh_on_change
-  autocmd!
-  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *  if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-augroup END
-]]
+augroup('Terminal', {})
+autocmd('TermOpen', { group = 'Terminal', pattern = '*', command = [[tnoremap <buffer> <Esc> <c-\><c-n>]]})
+autocmd('TermOpen', { group = 'Terminal', pattern = '*', command = [[set nonu]]})
 
 -- cmd [[
---   augroup formatter_format_on_save
+--   augroup center_buffer_remember_cursor_pos
 --     autocmd!
---     autocmd BufWritePost *.lua FormatWrite
+--     autocmd BufRead * normal zz
+--     autocmd VimResized * :wincmd =
+--     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 --   augroup END
 -- ]]
+augroup('CenterBufferRememberCursorPosition', {})
+autocmd('BufRead', { group = 'CenterBufferRememberCursorPosition', pattern = '*', command = [[:normal zz]]})
+autocmd('VimResized', { group = 'CenterBufferRememberCursorPosition', pattern = '*', command = [[:wincmd =]]})
+autocmd(
+  'BufReadPost',
+  {
+    group = 'CenterBufferRememberCursorPosition',
+    pattern = '*',
+    command = [[if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif]]
+  }
+)
+
+-- cmd [[
+-- augroup fix_devicon_color
+--   autocmd!
+--   autocmd ColorScheme * lua require('nvim-web-devicons').setup();
+-- augroup END
+-- ]]
+augroup('FixDevIconColor', {})
+autocmd(
+  'ColorScheme',
+  {
+    group = 'FixDevIconColor',
+    pattern = '*',
+    callback = function() require('nvim-web-devicons').setup() end
+  }
+)
+
+-- depends on pandoc (https://pandoc.org) be intalled
+-- cmd [[
+-- augroup read_word_docs
+--   autocmd!
+--   autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt silent %!pandoc "%" -tplain -o /dev/stdout
+-- augroup END
+-- ]]
+augroup('ReadOfficeDocuments', {})
+autocmd(
+  'BufReadPost',
+  {
+    group = 'ReadOfficeDocuments',
+    pattern = {'*.doc', '*.docx', '*.rtf', '*.odp', '*.odt'},
+    command = [[silent %!pandoc "%" -tplain -o /dev/stdout]]
+  }
+)
+
+-- cmd [[
+-- augroup refresh_on_change
+--   autocmd!
+--   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *  if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+-- augroup END
+-- ]]
+augroup('RefreshBufferOnExternalChange', {})
+autocmd(
+  {'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI'},
+  {
+    group = 'RefreshBufferOnExternalChange',
+    pattern = '*',
+    command = [[if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+]]
+  }
+)
