@@ -9,6 +9,8 @@ lspinstaller.settings({
   install_root_dir = vim.fn.stdpath('config') .. '/lsp_servers',
 })
 
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
 local map = require("utils").map
 
 local border = {
@@ -51,40 +53,54 @@ local on_attach = function(client, bufnr)
   map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', opts)
 
   if client.resolved_capabilities.document_formatting then
-    vim.cmd([[
-      augroup format_on_save
-        autocmd!
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-      augroup END
-    ]])
+    augroup('FormatOnSave', {})
+    autocmd('BufWritePre', { group = 'FormatOnSave', buffer = bufnr, callback = function() vim.lsp.buf.formatting_sync() end})
 
-    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()']])
+    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
   end
 
   if client.resolved_capabilities.document_highlight then
-    vim.cmd([[
-      augroup lsp_document_hightlight
-      autocmd! * <buffer>
-      autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-      autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]])
+    augroup('HightlightWordUnderCursor', {})
+    autocmd('CursorHold', { group = "HightlightWordUnderCursor", buffer = bufnr, callback = function() vim.lsp.buf.document_highlight() end})
+    autocmd('CursorMoved', { group = "HightlightWordUnderCursor", buffer = bufnr, callback = function() vim.lsp.buf.clear_references() end})
   end
 end
 
 local custom_server_options = {
   ['sumneko_lua'] = function(opts)
+
+    local library = {}
+    local function add(lib)
+      for _, p in pairs(vim.fn.expand(lib, false, true)) do
+        p = vim.loop.fs_realpath(p)
+        library[p] = true
+      end
+    end
+    add("$VIMRUNTIME")
+    add("~/.config/nvim")
+    add("~/.config/nvim/plugged/*")
+
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = true
       client.resolved_capabilities.document_range_formatting = true
       on_attach(client, bufnr)
     end
+
+    opts.on_new_config = function(config, root)
+      local libs = vim.tbl_deep_extend("force", {}, library)
+      libs[root] = nil
+      config.settings.Lua.workspace.library = libs
+      return config
+    end
+
     opts.settings = {
       Lua = {
         runtime = {
           version = 'LuaJIT',
-          path = vim.split(package.path, ';')
-          -- path = {'?.lua', '?/init.lua'}
+          path = {
+            'lua/?.lua',
+            'lua/?/init.lua',
+          },
         },
         diagnostics = {
           enable = true,
@@ -100,10 +116,7 @@ local custom_server_options = {
           callSnippet = 'Replace',
         },
         workspace = {
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-          }
+          library = library
         },
         misc = {
           parameters = '--preview'
@@ -111,13 +124,15 @@ local custom_server_options = {
       },
     }
   end,
-
   ['tsserver'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
       client.resolved_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
+  end,
+  ['denols'] = function (opts)
+    opts.root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc','deps.ts')
   end,
   ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
