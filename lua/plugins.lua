@@ -93,7 +93,21 @@ vim.call('plug#end')
 -- Enable plugins with default configurarion
 
 vim.notify = require('notify')
-require('fidget').setup()
+require('fidget').setup({
+  sources = {
+    ltex = {
+      ignore = true
+    }
+  }
+})
 require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
 require('neoscroll').setup()
+require('regexplainer').setup({
+    display = 'popup',
+    popup = {
+      border = {
+        style = 'solid'
+      }
+    }
+})
