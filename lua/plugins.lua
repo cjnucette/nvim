@@ -41,9 +41,13 @@ Plug('hrsh7th/cmp-nvim-lua')
 Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-vsnip')
+Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', {['do'] = 'npm install'})
 
 -- emmet (lsp versions suck)
 Plug('mattn/emmet-vim')
+
+-- formatter
+Plug('mhartington/formatter.nvim')
 
 -- statusline
 Plug('rebelot/heirline.nvim')
