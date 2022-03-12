@@ -489,6 +489,23 @@ local PackagerManagerStatusLine = {
   Delimiter,
 }
 
+local Checkhealth = {
+  condition = function ()
+    return conditions.buffer_matches({ filetype = {'checkhealth'}})
+  end,
+
+  Delimiter,
+  {
+    provider = ' ',
+    hl = { fg = colors.red}
+  },
+  {
+    provider = 'Checkhealth%='
+  },
+  Ruler,
+  Delimiter
+}
+
 local Http = {
   {
     provider = ' 爵 ',
@@ -568,6 +585,7 @@ local Statusline = {
   ExplorerStatusLine,
   PackagerManagerStatusLine,
   HttpStatusLine,
+  Checkhealth,
   InactiveStatusLine,
   DefaultStatusLine,
 }
