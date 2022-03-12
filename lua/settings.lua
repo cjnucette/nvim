@@ -61,12 +61,12 @@ vim.g.coc_explorer_global_presets = {
 }
 
 -- netrw
-vim.g.netrw_liststyle = 3
-vim.g.netrw_banner = false
-vim.g.netrw_browse_split = 2
-vim.g.netrw_winsize = 30
-vim.g.loaded_netrw = true
-vim.g.loaded_netrwPlugin = true
+-- vim.g.netrw_liststyle = 3
+-- vim.g.netrw_banner = false
+-- vim.g.netrw_browse_split = 2
+-- vim.g.netrw_winsize = 30
+-- vim.g.loaded_netrw = true
+-- vim.g.loaded_netrwPlugin = true
 
 -- vim-rooter
 vim.g.rooter_manual_only = 1
