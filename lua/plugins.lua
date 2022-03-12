@@ -9,10 +9,10 @@ end
 
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin', '/home/cjnucette/.config/nvim/plugged')
+vim.call('plug#begin', vim.fn.stdpath('config') .. '/plugged')
 -- dependencies
-Plug('MunifTanjim/nui.nvim') -- package-info dependency
-Plug('nvim-lua/plenary.nvim') -- Telescope dependecy
+Plug('MunifTanjim/nui.nvim') -- package-info, regexplainer dependency
+Plug('nvim-lua/plenary.nvim') -- Telescope and others dependecy
 Plug('kyazdani42/nvim-web-devicons') -- various packages
 
 -- Treesitter
@@ -75,10 +75,15 @@ Plug('numToStr/Comment.nvim')
 Plug('iamcco/markdown-preview.nvim', { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
 Plug('andymass/vim-matchup')
 Plug('lukas-reineke/indent-blankline.nvim')
-Plug('vuki656/package-info.nvim')
+Plug('vuki656/package-info.nvim') -- deps: nui
 Plug('rrethy/vim-hexokinase', { ['do'] = 'make hexokinase' })
 Plug('karb94/neoscroll.nvim')
 Plug('NTBBloodbath/color-converter.nvim')
+Plug('ahmedkhalf/project.nvim')
+Plug('bennypowers/nvim-regexplainer') -- deps: nui,plenary
+Plug('b0o/schemastore.nvim')
+Plug('mg979/vim-visual-multi', {['branch'] = 'master'})
+Plug('kyazdani42/nvim-tree.lua')
 
 -- Development
 Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')

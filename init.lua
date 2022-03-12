@@ -20,8 +20,7 @@ require('conf/indent-blankline')
 require('conf/package-info')
 require('conf/gitsigns')
 require('conf/color-converter')
+require('conf/nvim-tree')
+require('conf/project')
 require('conf/emmet')
 require('colorscheme')
-
--- prints colorgroup for the word under the cursor
-vim.cmd([[command! What echo synIDattr(synID(line('.'), col('.'), 1), 'name')]])
