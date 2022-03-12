@@ -11,7 +11,7 @@ lspinstaller.settings({
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
-local map = require("utils").map
+local map = require('utils').map
 
 local border = {
   { '╭', 'FloatBorder' },
@@ -54,15 +54,15 @@ local on_attach = function(client, bufnr)
 
   if client.resolved_capabilities.document_formatting then
     augroup('FormatOnSave', {})
-    autocmd('BufWritePre', { group = 'FormatOnSave', buffer = bufnr, callback = function() vim.lsp.buf.formatting_sync() end})
+    autocmd('BufWritePre', { group = 'FormatOnSave', buffer = bufnr, callback = function() vim.lsp.buf.formatting_sync() end })
 
-    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
+    -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
   end
 
   if client.resolved_capabilities.document_highlight then
     augroup('HightlightWordUnderCursor', {})
-    autocmd('CursorHold', { group = "HightlightWordUnderCursor", buffer = bufnr, callback = function() vim.lsp.buf.document_highlight() end})
-    autocmd('CursorMoved', { group = "HightlightWordUnderCursor", buffer = bufnr, callback = function() vim.lsp.buf.clear_references() end})
+    autocmd('CursorHold', { group = 'HightlightWordUnderCursor', buffer = bufnr, callback = function() vim.lsp.buf.document_highlight() end })
+    autocmd('CursorMoved', { group = 'HightlightWordUnderCursor', buffer = bufnr, callback = function() vim.lsp.buf.clear_references() end })
   end
 end
 
@@ -76,9 +76,10 @@ local custom_server_options = {
         library[p] = true
       end
     end
-    add("$VIMRUNTIME")
-    add("~/.config/nvim")
-    add("~/.config/nvim/plugged/*")
+
+    add('$VIMRUNTIME')
+    add('~/.config/nvim')
+    add('~/.config/nvim/plugged/*')
 
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = true
@@ -87,7 +88,7 @@ local custom_server_options = {
     end
 
     opts.on_new_config = function(config, root)
-      local libs = vim.tbl_deep_extend("force", {}, library)
+      local libs = vim.tbl_deep_extend('force', {}, library)
       libs[root] = nil
       config.settings.Lua.workspace.library = libs
       return config
@@ -131,8 +132,8 @@ local custom_server_options = {
       on_attach(client, bufnr)
     end
   end,
-  ['denols'] = function (opts)
-    opts.root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc','deps.ts')
+  ['denols'] = function(opts)
+    opts.root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc', 'deps.ts')
   end,
   ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
@@ -150,34 +151,35 @@ local custom_server_options = {
     opts.settings = {
       json = {
         format = { enable = true },
-        schemas = {
-          {
-            fileMatch = { 'tsconfig.json', 'jsconfig.json' },
-            url = 'https://json.schemastore.org/tsconfig.json',
-          },
-          {
-            fileMatch = { 'deno.json', 'deno.jsonc' },
-            url = 'https://deno.land/x/deno/cli/schemas/config-file.v1.json',
-          },
-          {
-            fileMatch = { 'package.json' },
-            url = 'https://json.schemastore.org/package.json',
-          },
-          {
-            fileMatch = { '.prettierrc' },
-            url = 'https://json.schemastore.org/prettierrc.json',
-          },
+        schemas = vim.list_extend(
+        {
+            {
+              description = 'Deno tsconfig replacement',
+              name = 'deno.json[c]',
+              fileMatch = { 'deno.json', 'deno.jsonc' },
+              url = 'https://deno.land/x/deno/cli/schemas/config-file.v1.json',
+            },
         },
+            require('schemastore').json.schemas()
+        ),
       },
     }
   end,
   ['yamlls'] = function(opts)
     opts.settings = {
       yaml = {
+        schemas = require('schemastore').json.schemas()
+      }
+    }
+
+  end,
+  ['taplo'] = function(opts)
+    opts.settings = {
+      toml = {
         schemas = {
           {
-            fileMatch = { 'docker-compose.yml', 'docker-compose.yaml' },
-            url = 'https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'
+            fileMatch = { 'Cargo.toml' },
+            url = 'https://taplo.tamasfe.dev/schemas/cargo.toml.json'
           }
         }
       }

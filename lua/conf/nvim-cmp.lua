@@ -1,7 +1,5 @@
 local cmp_ok, cmp = pcall(require, 'cmp')
-if not cmp_ok then
-  return
-end
+if not cmp_ok then return end
 
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
