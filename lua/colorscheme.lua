@@ -15,10 +15,16 @@ augroup MyColor
 augroup END
 ]])
 
+-- prints colorgroup for the word under the cursor
+vim.cmd([[command! What echo synIDattr(synID(line('.'), col('.'), 1), 'name')]])
+
 function MyHighlights()
   local bg = require('utils').get_color('Normal', 'bg#')
   -- cmd([[hi EndOfBuffer guifg=bg]])
   hi(0, 'EndOfBuffer', { fg = bg })
+  -- palenight fix; otherwise remove it or change it accordingly
+  -- hi(0, 'Pmenu', { bg = '#202331'})
+  -- hi(0, 'PmenuSel', { bg = '#202331'})
   if vim.fn.exists('+pumblend') then
     cmd([[hi PmenuSel blend=0]])
     -- hi(0, 'PmenuSel', { blend = 0 })

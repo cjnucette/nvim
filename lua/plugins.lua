@@ -25,12 +25,13 @@ Plug('folke/tokyonight.nvim')
 Plug('joshdick/onedark.vim')
 Plug('shaunsingh/nord.nvim')
 Plug('dracula/vim', {['as'] = 'dracula'})
+Plug('cocopon/iceberg.vim')
 
 -- lsp
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/nvim-lsp-installer')
-Plug('jose-elias-alvarez/null-ls.nvim')
 Plug('j-hui/fidget.nvim')
+-- Plug('jose-elias-alvarez/null-ls.nvim')
 
 -- completion and snippets
 Plug('hrsh7th/nvim-cmp')
