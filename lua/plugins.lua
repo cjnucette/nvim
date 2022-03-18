@@ -86,7 +86,8 @@ Plug('mg979/vim-visual-multi', {['branch'] = 'master'})
 Plug('kyazdani42/nvim-tree.lua')
 
 -- Development
-Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')
+-- Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')
+-- Plug('~/Workspace/code/lua/safe-defaults.nvim')
 
 vim.call('plug#end')
 
