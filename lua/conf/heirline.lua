@@ -22,7 +22,7 @@ local signs = require('utils').signs
 local capitalize = require('utils').capitalize
 
 -- statusline options
-set.laststatus = 2
+set.laststatus = 3
 set.showmode = false
 set.cmdheight = 2
 
@@ -429,7 +429,13 @@ local LiveServer = {
   }
 }
 
-local Terminal = {
+local TerminalStatusLine = {
+  condition = function()
+    return conditions.buffer_matches({ buftype = { 'terminal' } })
+  end,
+
+  Delimiter,
+  { condition = conditions.is_active, ViMode, Space },
   {
     provider = '  ',
     hl = { fg = colors.folder },
@@ -439,57 +445,41 @@ local Terminal = {
   },
 }
 
-local TerminalStatusLine = {
-  condition = function()
-    return conditions.buffer_matches({ buftype = { 'terminal' } })
-  end,
 
-  Delimiter,
-  { condition = conditions.is_active, ViMode, Space },
-  Terminal,
-}
-
-local Explorer = {
-  {
-    provider = '  ',
-    hl = { fg = colors.folder },
-  },
-  {
-    provider = 'Explorer%=',
-  },
-}
-local ExplorerStatusLine = {
+local FileExplorerStatusLine = {
   condition = function()
     return conditions.buffer_matches({ filetype = { 'coc-explorer', 'NvimTree' } })
   end,
 
   Delimiter,
-  Explorer,
-}
-
-local PackagerManager = {
   {
-    provider = '  ',
+    provider = '  ',
     hl = { fg = colors.folder },
   },
   {
-    provider = 'Package Manager%=',
+    provider = 'Files Explorer%=',
   },
 }
 
-local PackagerManagerStatusLine = {
+local PluginManagerStatusLine = {
   condition = function()
     return vim.bo.ft == 'vim-plug' or vim.bo.ft == 'packer'
     -- return conditions.buffer_matches({ filetype = { 'vim-plug', 'packer' } }) -- nop
   end,
 
   Delimiter,
-  PackagerManager,
+  {
+    provider = '  ',
+    hl = { fg = colors.folder },
+  },
+  {
+    provider = 'Plugin Manager%=',
+  },
   Ruler,
   Delimiter,
 }
 
-local Checkhealth = {
+local CheckhealthStatusLine = {
   condition = function ()
     return conditions.buffer_matches({ filetype = {'checkhealth'}})
   end,
@@ -506,7 +496,12 @@ local Checkhealth = {
   Delimiter
 }
 
-local Http = {
+local HttpStatusLine = {
+  condition = function()
+    return vim.bo.ft == 'httpResult'
+  end,
+
+  Delimiter,
   {
     provider = ' 爵 ',
     hl = { fg = colors.folder },
@@ -514,15 +509,6 @@ local Http = {
   {
     provider = 'Http Result%=',
   },
-}
-
-local HttpStatusLine = {
-  condition = function()
-    return vim.bo.ft == 'httpResult'
-  end,
-
-  Delimiter,
-  Http,
   Ruler,
   Delimiter,
 }
@@ -582,10 +568,10 @@ local Statusline = {
   init = utils.pick_child_on_condition,
 
   TerminalStatusLine,
-  ExplorerStatusLine,
-  PackagerManagerStatusLine,
+  FileExplorerStatusLine,
+  PluginManagerStatusLine,
   HttpStatusLine,
-  Checkhealth,
+  CheckhealthStatusLine,
   InactiveStatusLine,
   DefaultStatusLine,
 }
