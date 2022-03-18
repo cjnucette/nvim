@@ -14,7 +14,7 @@ map('n', '<leader>x', '<cmd>x!<cr>')
 map('n', '<leader><space>', 'za')
 map('v', '<leader><space>', 'za')
 map('n', '<leader>u', 'vb~A')
-
+map('n', '<leader>cd', '<cmd>cd %:p:h<cr>')
 --various searches
 map('n', '<leader>gh', "<cmd>h <c-r>=expand('<cword>')<cr><cr>")
 map('n', '<leader>*', '<cmd>grep -R <cword> * --exclude-dir={node_modules,.git}<cr><cr>')
