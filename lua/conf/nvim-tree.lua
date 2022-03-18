@@ -40,6 +40,9 @@ nvimtree.setup({
       list = list,
     },
   },
+  filters = {
+    dotfiles = true
+  },
   actions = {
     open_file = {
       quit_on_open = true, -- close nvimtree when selecting a file.
