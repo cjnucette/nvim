@@ -93,7 +93,6 @@ local custom_server_options = {
       config.settings.Lua.workspace.library = libs
       return config
     end
-
     opts.settings = {
       Lua = {
         runtime = {
@@ -117,10 +116,11 @@ local custom_server_options = {
           callSnippet = 'Replace',
         },
         workspace = {
-          library = library
+          library = library,
+          checkThirdParty = false,
         },
-        misc = {
-          parameters = '--preview'
+        telemetry = {
+          enable = false
         }
       },
     }
