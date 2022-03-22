@@ -3,6 +3,9 @@ if not lspinstaller_ok then
   return
 end
 
+local saga_ok, _ = pcall (require,'lspsaga')
+local telescope_ok, _ = pcall (require,'telescope')
+
 -- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
 
 lspinstaller.settings({
@@ -43,14 +46,19 @@ local on_attach = function(client, bufnr)
 
   local opts = { buffer = 0 }
   -- mappings
-  map('n', 'K', vim.lsp.buf.hover, opts)
-  map('n', 'gd', vim.lsp.buf.definition, opts)
-  map('n', 'gT', vim.lsp.buf.type_definition, opts)
-  map('n', 'gI', vim.lsp.buf.implementation, opts)
-  map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+  if not saga_ok then
+    map('n', 'K', vim.lsp.buf.hover, opts)
+    map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+    map('n', '<F2>', vim.lsp.buf.rename, opts)
+  end
+
+  if not telescope_ok then
+    map('n', 'gd', vim.lsp.buf.definition, opts)
+    map('n', 'gT', vim.lsp.buf.type_definition, opts)
+    map('n', 'gI', vim.lsp.buf.implementation, opts)
+  end
+
   map('n', '<leader>f', '<cmd>Format<cr>', opts)
-  map('n', '<F2>', vim.lsp.buf.rename, opts)
-  map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', opts)
 
   if client.resolved_capabilities.document_formatting then
     augroup('FormatOnSave', {})

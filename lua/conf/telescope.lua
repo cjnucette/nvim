@@ -1,7 +1,10 @@
+local telescope_ok, telescope = pcall(require, 'telescope')
+if not telescope_ok then return end
+
 local map = require('utils').map
 
 -- settings
-require('telescope').setup({
+telescope.setup({
   defaults = {
     layout_config = {
       prompt_position = 'top',
@@ -64,5 +67,12 @@ map('n', '<leader>tg', '<cmd>Telescope live_grep<CR>')
 map('n', '<leader>tp', '<cmd>Telescope projects<CR>')
 map('n', '<leader>tn', '<cmd>lua require("conf/telescope").notes()<cr>')
 map('n', '<leader>tc', '<cmd>lua require("conf/telescope").nvim_config()<cr>')
+
+-- lsp and diagnostic mappings
+local opts = { buffer = 0 }
+map('n', 'gd', '<cmd>Telescope lsp_definition<cr>', opts)
+map('n', 'gT', '<cmd>Telescope lsp_type_definition<cr>', opts)
+map('n', 'gI', '<cmd>Telescope lsp_implementation<cr>', opts)
+map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', opts)
 
 return M

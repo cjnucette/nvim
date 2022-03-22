@@ -31,7 +31,7 @@ Plug('cocopon/iceberg.vim')
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/nvim-lsp-installer')
 Plug('j-hui/fidget.nvim')
--- Plug('jose-elias-alvarez/null-ls.nvim')
+-- Plug('tami5/lspsaga.nvim')
 
 -- completion and snippets
 Plug('hrsh7th/nvim-cmp')
@@ -93,14 +93,6 @@ vim.call('plug#end')
 
 -- Enable plugins with default configurarion
 
-vim.notify = require('notify')
-require('fidget').setup({
-  sources = {
-    ltex = {
-      ignore = true
-    }
-  }
-})
 require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
 require('neoscroll').setup()
@@ -111,4 +103,12 @@ require('regexplainer').setup({
         style = 'solid'
       }
     }
+})
+vim.notify = require('notify')
+require('fidget').setup({
+  sources = {
+    ltex = {
+      ignore = true
+    }
+  }
 })

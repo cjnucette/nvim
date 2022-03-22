@@ -1,25 +1,33 @@
 local signs = require('utils').signs
 local map = require('utils').map
+local saga_ok = pcall(require, 'lspsaga')
 
-vim.diagnostic.config({
-  underline = true,
-  signs = true,
-  update_in_insert = false,
-  severity_sort = true,
-  float = {
-    show_header = false,
-    source = 'always',
-    border = 'single',
-  },
-  virtual_text = false,
-  -- virtual_text = {
-  --   spacing = 4,
-  --   source = "always",
-  --   severity = {
-  --     min = vim.diagnostic.severity.HINT,
-  --   },
-  -- },
-})
+if not saga_ok then
+  vim.diagnostic.config({
+    underline = true,
+    signs = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+      show_header = false,
+      source = 'always',
+      border = 'single',
+    },
+    virtual_text = false,
+    -- virtual_text = {
+    --   spacing = 4,
+    --   source = "always",
+    --   severity = {
+    --     min = vim.diagnostic.severity.HINT,
+    --   },
+    -- },
+  })
+  -- mappings
+  map('n', '<leader>dn', vim.diagnostic.goto_next)
+  map('n', '<leader>dp', vim.diagnostic.goto_prev)
+  map('n', '<leader>ds', vim.diagnostic.open_float)
+  map('n', '<leader>da', vim.diagnostic.setloclist)
+end
 
 -- Diagnostic Signs
 vim.fn.sign_define('DiagnosticSignError', { text = signs.error, texthl = 'DiagnosticSignError', numhl = '' })
@@ -34,8 +42,3 @@ vim.fn.sign_define('DiagnosticSignHint', { text = signs.hint, texthl = 'Diagnost
 --   augroup END
 -- ]])
 
--- mappings
-map('n', '<leader>dn', vim.diagnostic.goto_next)
-map('n', '<leader>dp', vim.diagnostic.goto_prev)
-map('n', '<leader>da', vim.diagnostic.setloclist)
-map('n', '<leader>ds', vim.diagnostic.open_float)
