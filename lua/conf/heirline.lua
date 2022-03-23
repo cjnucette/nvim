@@ -457,7 +457,7 @@ local FileExplorerStatusLine = {
     hl = { fg = colors.folder },
   },
   {
-    provider = 'Files Explorer%=',
+    provider = 'File Explorer%=',
   },
 }
 
