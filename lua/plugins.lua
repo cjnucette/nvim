@@ -84,6 +84,7 @@ Plug('bennypowers/nvim-regexplainer') -- deps: nui,plenary
 Plug('b0o/schemastore.nvim')
 Plug('mg979/vim-visual-multi', {['branch'] = 'master'})
 Plug('kyazdani42/nvim-tree.lua')
+Plug('folke/todo-comments.nvim')
 
 -- Development
 -- Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')
@@ -96,6 +97,7 @@ vim.call('plug#end')
 require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
 require('neoscroll').setup()
+require('todo-comments').setup()
 require('regexplainer').setup({
     display = 'popup',
     popup = {
