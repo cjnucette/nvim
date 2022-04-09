@@ -27,9 +27,9 @@ local prettier = function()
   return options
 end
 
-local filetypes = {'html', 'css', 'markdown', 'json', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}
-local filetype = {}
+local filetypes = {'html', 'css', 'markdown', 'json', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'astro', 'nunjucks'}
 
+local filetype = {}
 for _, ft in ipairs(filetypes) do
   filetype[ft] = {prettier}
 end
@@ -41,6 +41,6 @@ formatter.setup({
 augroup('FormatterOnSave', {})
 autocmd('BufWritePost', {
   group = 'FormatterOnSave',
-  pattern = {'*.html', '*.css', '*.md', '*.json', '*.js', '*.jsx', '*.ts', '*.tsx'},
+  pattern = {'*.html', '*.css', '*.md', '*.json', '*.js', '*.jsx', '*.ts', '*.tsx', '*.astro', '*.njk'},
   command = 'FormatWrite'
 })
