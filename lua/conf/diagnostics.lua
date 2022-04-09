@@ -9,9 +9,12 @@ if not saga_ok then
     update_in_insert = false,
     severity_sort = true,
     float = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
       show_header = false,
       source = 'always',
-      border = 'single',
+      border = 'rounded',
+      prefix = ' '
     },
     virtual_text = false,
     -- virtual_text = {

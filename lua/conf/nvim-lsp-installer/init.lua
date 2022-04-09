@@ -3,9 +3,8 @@ if not lspinstaller_ok then
   return
 end
 
-local saga_ok, _ = pcall (require,'lspsaga')
-local telescope_ok, _ = pcall (require,'telescope')
-
+local saga_ok, _ = pcall(require, 'lspsaga')
+local telescope_ok, _ = pcall(require, 'telescope')
 
 lspinstaller.settings({
   install_root_dir = vim.fn.stdpath('config') .. '/lsp_servers',
@@ -64,21 +63,38 @@ local on_attach = function(client, bufnr)
 
   if client.resolved_capabilities.document_formatting then
     augroup('FormatOnSave', {})
-    autocmd('BufWritePre', { group = 'FormatOnSave', buffer = bufnr, callback = function() vim.lsp.buf.formatting_sync() end })
+    autocmd('BufWritePre', {
+      group = 'FormatOnSave',
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.formatting_sync()
+      end,
+    })
 
     -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
   end
 
   if client.resolved_capabilities.document_highlight then
     augroup('HightlightWordUnderCursor', {})
-    autocmd('CursorHold', { group = 'HightlightWordUnderCursor', buffer = bufnr, callback = function() vim.lsp.buf.document_highlight() end })
-    autocmd('CursorMoved', { group = 'HightlightWordUnderCursor', buffer = bufnr, callback = function() vim.lsp.buf.clear_references() end })
+    autocmd('CursorHold', {
+      group = 'HightlightWordUnderCursor',
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.document_highlight()
+      end,
+    })
+    autocmd('CursorMoved', {
+      group = 'HightlightWordUnderCursor',
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.clear_references()
+      end,
+    })
   end
 end
 
 local custom_server_options = {
   ['sumneko_lua'] = function(opts)
-
     local library = {}
     local function add(lib)
       for _, p in pairs(vim.fn.expand(lib, false, true)) do
@@ -91,11 +107,11 @@ local custom_server_options = {
     add('~/.config/nvim')
     add('~/.config/nvim/plugged/*')
 
-    opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = true
-      client.resolved_capabilities.document_range_formatting = true
-      on_attach(client, bufnr)
-    end
+    -- opts.on_attach = function(client, bufnr)
+    --   client.resolved_capabilities.document_formatting = true
+    --   client.resolved_capabilities.document_range_formatting = true
+    --   on_attach(client, bufnr)
+    -- end
 
     opts.on_new_config = function(config, root)
       local libs = vim.tbl_deep_extend('force', {}, library)
@@ -119,9 +135,9 @@ local custom_server_options = {
           },
           globals = { 'vim', 'P', 'R', 'it', 'describe', 'before_each', 'after_each' },
         },
-        format = {
-          enable = true,
-        },
+        -- format = {
+        --   enable = true,
+        -- },
         completion = {
           callSnippet = 'Replace',
         },
@@ -130,11 +146,12 @@ local custom_server_options = {
           checkThirdParty = false,
         },
         telemetry = {
-          enable = false
-        }
+          enable = false,
+        },
       },
     }
   end,
+
   ['tsserver'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
@@ -142,9 +159,11 @@ local custom_server_options = {
       on_attach(client, bufnr)
     end
   end,
+
   ['denols'] = function(opts)
     opts.root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc', 'deps.ts')
   end,
+
   ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
@@ -152,6 +171,7 @@ local custom_server_options = {
       on_attach(client, bufnr)
     end
   end,
+
   ['jsonls'] = function(opts)
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
@@ -161,41 +181,40 @@ local custom_server_options = {
     opts.settings = {
       json = {
         format = { enable = true },
-        schemas = vim.list_extend(
-        {
-            {
-              description = 'Deno tsconfig replacement',
-              name = 'deno.json[c]',
-              fileMatch = { 'deno.json', 'deno.jsonc' },
-              url = 'https://deno.land/x/deno/cli/schemas/config-file.v1.json',
-            },
-        },
-            require('schemastore').json.schemas()
-        ),
+        schemas = vim.list_extend({
+          {
+            description = 'Deno tsconfig replacement',
+            name = 'deno.json[c]',
+            fileMatch = { 'deno.json', 'deno.jsonc' },
+            url = 'https://deno.land/x/deno/cli/schemas/config-file.v1.json',
+          },
+        }, require(
+          'schemastore'
+        ).json.schemas()),
       },
     }
   end,
+
   ['yamlls'] = function(opts)
     opts.settings = {
       yaml = {
-        schemas = require('schemastore').json.schemas()
-      }
+        schemas = require('schemastore').json.schemas(),
+      },
     }
-
   end,
+
   ['taplo'] = function(opts)
     opts.settings = {
       toml = {
         schemas = {
           {
             fileMatch = { 'Cargo.toml' },
-            url = 'https://taplo.tamasfe.dev/schemas/cargo.toml.json'
-          }
-        }
-      }
+            url = 'https://taplo.tamasfe.dev/schemas/cargo.toml.json',
+          },
+        },
+      },
     }
-
-  end
+  end,
 }
 
 lspinstaller.on_server_ready(function(server)

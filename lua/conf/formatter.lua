@@ -1,12 +1,14 @@
 local formatter_ok, formatter = pcall(require, 'formatter')
-if not formatter_ok then return end
+if not formatter_ok then
+  return
+end
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
 local prettier = function()
   local options = {
-    exe = "prettier",
+    exe = 'prettier',
     args = {
       '--config-precedence',
       'prefer-file',
@@ -27,20 +29,43 @@ local prettier = function()
   return options
 end
 
-local filetypes = {'html', 'css', 'markdown', 'json', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'astro', 'nunjucks'}
+local filetypes = {
+  'html',
+  'css',
+  'markdown',
+  'json',
+  'javascript',
+  'javascriptreact',
+  'typescript',
+  'typescriptreact',
+  'astro',
+  'nunjucks',
+}
 
 local filetype = {}
 for _, ft in ipairs(filetypes) do
-  filetype[ft] = {prettier}
+  filetype[ft] = { prettier }
 end
 
+filetype.lua = {
+  function()
+    return {
+      exe = 'stylua',
+      args = {
+        '-',
+      },
+      stdin = true,
+    }
+  end,
+}
+
 formatter.setup({
-  filetype = filetype
+  filetype = filetype,
 })
 
 augroup('FormatterOnSave', {})
 autocmd('BufWritePost', {
   group = 'FormatterOnSave',
-  pattern = {'*.html', '*.css', '*.md', '*.json', '*.js', '*.jsx', '*.ts', '*.tsx', '*.astro', '*.njk'},
-  command = 'FormatWrite'
+  pattern = { '*.html', '*.css', '*.md', '*.json', '*.js', '*.jsx', '*.ts', '*.tsx', '*.astro', '*.njk', '*.lua' },
+  command = 'FormatWrite',
 })

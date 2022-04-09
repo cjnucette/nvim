@@ -421,7 +421,7 @@ local Spell = {
 
 local LiveServer = {
   condition = function()
-    return conditions.buffer_matches({filetype = require('live_server').filetypes })
+    return require('live_server').has_start_scripts() or conditions.buffer_matches({filetype = {'html', 'css', 'js', 'ts'}})
   end,
   Space,
   {
