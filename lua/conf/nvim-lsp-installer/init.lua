@@ -6,11 +6,13 @@ end
 local saga_ok, _ = pcall (require,'lspsaga')
 local telescope_ok, _ = pcall (require,'telescope')
 
--- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
 
 lspinstaller.settings({
   install_root_dir = vim.fn.stdpath('config') .. '/lsp_servers',
 })
+
+-- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
+require('conf/nvim-lsp-installer/custom-servers/astro-ls')
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
