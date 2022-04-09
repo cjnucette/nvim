@@ -223,12 +223,14 @@ local ViMode = {
   },
   utils.make_flexible_component(1, {
     provider = function(self)
-      return '--' .. self.mode_names[self.mode][1]:upper() .. '--'
+      return self.mode_names[self.mode][1]:upper()
     end,
+    hl = { style = "bold" },
   }, {
     provider = function(self)
-      return '-' .. self.mode_names[self.mode][2]:upper() .. '-'
+      return self.mode_names[self.mode][2]:upper()
     end,
+    hl = { style = "bold" },
   }),
 }
 
@@ -419,12 +421,12 @@ local Spell = {
 
 local LiveServer = {
   condition = function()
-    return conditions.buffer_matches({filetype = {'css', 'html'}})
+    return conditions.buffer_matches({filetype = require('live_server').filetypes })
   end,
   Space,
   {
     provider = function()
-      return vim.g.live_server and ' ' or '睊'
+      return require('live_server').is_active and ' ' or '睊'
     end,
   }
 }
@@ -448,7 +450,7 @@ local TerminalStatusLine = {
 
 local FileExplorerStatusLine = {
   condition = function()
-    return conditions.buffer_matches({ filetype = { 'coc-explorer', 'NvimTree' } })
+    return conditions.buffer_matches({ filetype = { 'NvimTree' } }) or vim.o.ft == 'neo-tree'
   end,
 
   Delimiter,

@@ -32,6 +32,7 @@ Plug('neovim/nvim-lspconfig')
 Plug('williamboman/nvim-lsp-installer')
 Plug('j-hui/fidget.nvim')
 -- Plug('tami5/lspsaga.nvim')
+Plug('stevearc/dressing.nvim')
 
 -- completion and snippets
 Plug('hrsh7th/nvim-cmp')
@@ -61,6 +62,10 @@ Plug('nvim-telescope/telescope-file-browser.nvim')
 Plug('lewis6991/gitsigns.nvim')
 Plug('tpope/vim-fugitive')
 
+-- file explorer
+-- Plug('kyazdani42/nvim-tree.lua')
+Plug('nvim-neo-tree/neo-tree.nvim')
+
 -- others
 Plug('akinsho/bufferline.nvim')
 Plug('akinsho/toggleterm.nvim')
@@ -83,7 +88,6 @@ Plug('ahmedkhalf/project.nvim')
 Plug('bennypowers/nvim-regexplainer') -- deps: nui,plenary
 Plug('b0o/schemastore.nvim')
 Plug('mg979/vim-visual-multi', {['branch'] = 'master'})
-Plug('kyazdani42/nvim-tree.lua')
 Plug('folke/todo-comments.nvim')
 
 -- Development
@@ -98,6 +102,7 @@ require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup()
 require('neoscroll').setup()
 require('todo-comments').setup()
+require('dressing').setup()
 require('regexplainer').setup({
     display = 'popup',
     popup = {
