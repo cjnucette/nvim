@@ -4,14 +4,32 @@
 */
 
 :root {
-  /* type scale */
-  --font-size: 100%;
-  --ratio: 1.333;
-  --ratio-alt: 1.68; /* golden ratio */
-  --h4: calc(var(--font-size) * var(--ratio));
-  --h3: calc(var(--h4) * var(--ratio));
-  --h2: calc(var(--h3) * var(--ratio));
-  --h1: calc(var(--h2) * var(--ratio));
+  /* Using Roboto font as reference, adjust when using other fonts */
+  --fs-900: 4.209rem;
+  --fs-800: 3.157rem;
+  --fs-700: 2.369rem;
+  --fs-600: 1.777rem;
+  --fs-500: 1.333rem;
+  --fs-400: 1rem; /* Base */
+  --fs-300: 0.75rem;
+  --fs-200: 0.563rem;
+  --fs-100: 0.422rem;
+
+  --fw-900: 900;
+  --fw-700: 700;
+  --fw-500: 500;
+  --fw-400: 400; /* Base */
+  --fw-300: 300;
+  --fw-100: 100;
+
+  /* adjust colors as needed */
+  --clr-accent: hsl(245, 45%, 50%); /* 10% call for accion */
+  --clr-neutral-100: hsl(0, 0%, 100%);
+  --clr-neutral-400: hsl(220, 53%, 97%); /* Base, 60%  background and stuff */
+  --clr-neutral-500: hsl(197, 16%, 92%);
+  --clr-neutral-900: hsl(0, 0%, 0%);
+  --clr-primary: hsl(245, 66%, 41%); /* 30%  main color, brand color */
+
   --shw-x-offset: 2px;
 }
 
@@ -24,7 +42,7 @@
 }
 
 html {
-  font-size: 1rem;
+  font-size: var(--fs-400);
 }
 html:focus-within {
   scroll-behavior: smooth;
@@ -55,16 +73,16 @@ body {
 }
 
 h4 {
-  font-size: var(--h4);
+  font-size: var(--fs-600);
 }
 h3 {
-  font-size: var(--h3);
+  font-size: var(--fs-700);
 }
 h2 {
-  font-size: var(--h2);
+  font-size: var(--fs-800);
 }
 h1 {
-  font-size: var(--h1);
+  font-size: var(--fs-900);
 }
 
 p,
