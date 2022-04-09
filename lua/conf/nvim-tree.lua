@@ -16,7 +16,7 @@ vim.g.nvim_tree_indent_markers = 1
 
 -- setup
 nvimtree.setup({
-  auto_close = true, -- quit nvim if nvimtree is the last buffer.
+  -- auto_close = true, -- quit nvim if nvimtree is the last buffer.
   update_cwd = true,
   open_on_setup = true,
   disable_netrw        = false,
@@ -54,3 +54,13 @@ nvimtree.setup({
 map('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
 map('n', '<leader>er', '<cmd>NvimTreeRefresh<CR>')
 map('n', '<leader>en', '<cmd>NvimTreeFindFile<CR>')
+
+-- autocmd
+-- vim.api.nvim_create_augroup('NvimTree', {})
+-- vim.api.nvim_create_autocmd('BufEnter',
+--   {
+--     group='NvimTree',
+--     pattern = '*',
+--     command=[[++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpager() | quit | endif]],
+--     desc = 'Automatically close the tab/vim when nvim-tree is the last window'
+--   })
