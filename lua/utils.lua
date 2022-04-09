@@ -24,4 +24,8 @@ M.get_color = function(hlgroup, attr)
   return fn.synIDattr(fn.synIDtrans(fn.hlID(hlgroup)), attr, 'gui')
 end
 
+M.is_file_present = function(filename)
+  return vim.fn.filereadable(vim.fn.expand(filename)) == 1
+end
+
 return M
