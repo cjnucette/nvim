@@ -1,8 +1,3 @@
-/*
-  Inspired by Josh's Custom CSS Reset
-  https://www.joshwcomeau.com/css/custom-css-reset/
-*/
-
 :root {
   /* Using Roboto font as reference, adjust when using other fonts */
   --fs-900: 4.209rem;
@@ -33,108 +28,35 @@
   --shw-x-offset: 2px;
 }
 
-*,
-::after,
-::before {
-  box-sizing: border-box;
-  line-height: calc(1em + 0.5rem); /* not in body because ems don't inherit well */
-  margin: 0;
-}
+/* CSS */
+/* set global fonts and color to take advantage of the cascade and inheritance */
 
-html {
-  font-size: var(--fs-400);
-}
-html:focus-within {
-  scroll-behavior: smooth;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeSpeed;
-  min-height: 100vh;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-@supports (font-size-adjust: 1) {
-  body {
-    font-size-adjust: 0.5;
-  }
-}
-
-h4 {
-  font-size: var(--fs-600);
-}
-h3 {
-  font-size: var(--fs-700);
-}
-h2 {
-  font-size: var(--fs-800);
-}
-h1 {
-  font-size: var(--fs-900);
-}
-
-p,
-li,
-dt,
-dd,
-blockquote,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-img,
-picture,
-video,
-canvas,
-svg {
-  max-width: 100%;
-  display: block;
-}
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font: inherit;
-}
-
-:where(ul[class], ol[class]) {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-a:not([class]) {
-  text-decoration-skip-ink: auto;
-}
-
-/* Utilities */
-.container {
-  width: min(100% - 2rem, 60ch);
-  margin-inline: auto;
-}
+/* Composition Layer
+ *
+ * This should provide a skeletal layout structure
+ * that shouldn't interfere with the component (block)
+ * It should:
+ * Provide high-level, flexible layouts
+ * Determine how element interact with each other
+ * Create consistent flow a rythm
+ */
 
 .flow > * + * {
   margin-top: var(--flow-spacer, 1rem);
+}
+
+/* Utilities
+ *
+ * A utility is a class that does one job and does that one job well.
+ * This class --most often than not--will have only one property defined.
+ * But it might also have a few CSS properties defined, in a consise group.
+ * It should extend design tokens.
+ * It should abstract repeatability away from the CSS and apply it in the HTML instead.
+ * */
+
+.container {
+  width: min(100% - 2rem, 60ch);
+  margin-inline: auto;
 }
 
 .shadow {
@@ -142,12 +64,29 @@ a:not([class]) {
     calc(var(--shw-x-offset) * 2) hsl(0deg 0% 0% / 0.5);
 }
 
-/* Create a root stacking context */
-/* This needs to be adjusted to meet the js framework being used. */
-#app,
-#root,
-#__next {
-  isolation: isolate;
-}
+/* Block
+ * It is a skeletal component or organizational structure.
+ * It is a card element or a button element for example.
+ * At this point most of the work have already been done by the
+ * global CSS, composition and utility layers.
+ * It is safe because of the parent block class (.my-block) wich adds
+ * one extra specificity point for you.
+ * examples: .my-block .image {} or .my-block img {}
+ * There could be a block-level composition layer
+ *
+ * It should:
+ * - Extend the work already done by the global CSS, composition and utility layers
+ * - Apply a collection of design tokens within a concise group
+ * - Create a namespace or specifity boost to control a specific context
+ */
 
-/* Your styles */
+/* Exception 
+ *
+ * An exception is a deviation from the rules outlined in a block--state change.
+ * We add an exception using a data attribute: data-state="reversed" to the element.
+ * Then we target it in css like so .card[data-state="reversed"]
+ * It should:
+ * - Provide a concise variation to a block
+ * - Use data attributes
+ *
+ * */
