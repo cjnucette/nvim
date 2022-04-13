@@ -3,6 +3,11 @@ if not lspinstaller_ok then
   return
 end
 
+local lsp_format_ok, lsp_format = pcall(require, 'lsp-format')
+if lsp_format_ok then
+  lsp_format.setup {}
+end
+
 local saga_ok, _ = pcall(require, 'lspsaga')
 local telescope_ok, _ = pcall(require, 'telescope')
 
@@ -61,17 +66,21 @@ local on_attach = function(client, bufnr)
 
   map('n', '<leader>f', '<cmd>Format<cr>', opts)
 
-  if client.resolved_capabilities.document_formatting then
-    augroup('FormatOnSave', {})
-    autocmd('BufWritePre', {
-      group = 'FormatOnSave',
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.buf.formatting_sync()
-      end,
-    })
+  if lsp_format_ok then
+    lsp_format.on_attach(client)
+  else
+    if client.resolved_capabilities.document_formatting then
+      augroup('FormatOnSave', {})
+      autocmd('BufWritePre', {
+        group = 'FormatOnSave',
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.formatting_sync()
+        end,
+      })
 
-    -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
+      vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
+    end
   end
 
   if client.resolved_capabilities.document_highlight then
@@ -107,11 +116,11 @@ local custom_server_options = {
     add('~/.config/nvim')
     add('~/.config/nvim/plugged/*')
 
-    -- opts.on_attach = function(client, bufnr)
-    --   client.resolved_capabilities.document_formatting = true
-    --   client.resolved_capabilities.document_range_formatting = true
-    --   on_attach(client, bufnr)
-    -- end
+    opts.on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = true
+      client.resolved_capabilities.document_range_formatting = true
+      on_attach(client, bufnr)
+    end
 
     opts.on_new_config = function(config, root)
       local libs = vim.tbl_deep_extend('force', {}, library)
@@ -135,9 +144,9 @@ local custom_server_options = {
           },
           globals = { 'vim', 'P', 'R', 'it', 'describe', 'before_each', 'after_each' },
         },
-        -- format = {
-        --   enable = true,
-        -- },
+        format = {
+          enable = true,
+        },
         completion = {
           callSnippet = 'Replace',
         },
@@ -213,6 +222,21 @@ local custom_server_options = {
           },
         },
       },
+    }
+  end,
+
+  ['emmet_ls'] = function(opts)
+    opts.on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
+      client.resolved_capabilities.document_range_formatting = false
+      on_attach(client, bufnr)
+    end
+  end,
+
+  ['efm'] = function(opts)
+    opts.init_options = { documentFormatting = true }
+    opts.settings = {
+      languages = require('conf.nvim-lsp-installer.efm-conf').languages,
     }
   end,
 }

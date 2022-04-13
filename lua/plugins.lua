@@ -24,14 +24,13 @@ Plug('marko-cerovac/material.nvim')
 Plug('folke/tokyonight.nvim')
 Plug('joshdick/onedark.vim')
 Plug('shaunsingh/nord.nvim')
-Plug('dracula/vim', {['as'] = 'dracula'})
+Plug('dracula/vim', { ['as'] = 'dracula' })
 Plug('cocopon/iceberg.vim')
 
 -- lsp
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/nvim-lsp-installer')
 Plug('j-hui/fidget.nvim')
--- Plug('tami5/lspsaga.nvim')
 Plug('stevearc/dressing.nvim')
 
 -- completion and snippets
@@ -42,13 +41,14 @@ Plug('hrsh7th/cmp-nvim-lua')
 Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-vsnip')
-Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', {['do'] = 'npm install'})
+Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', { ['do'] = 'npm install' })
 
 -- emmet (lsp versions suck)
 Plug('mattn/emmet-vim')
 
 -- formatter
-Plug('mhartington/formatter.nvim')
+-- Plug('mhartington/formatter.nvim')
+Plug('lukas-reineke/lsp-format.nvim')
 
 -- statusline
 Plug('rebelot/heirline.nvim')
@@ -87,7 +87,7 @@ Plug('NTBBloodbath/color-converter.nvim')
 Plug('ahmedkhalf/project.nvim')
 Plug('bennypowers/nvim-regexplainer') -- deps: nui,plenary
 Plug('b0o/schemastore.nvim')
-Plug('mg979/vim-visual-multi', {['branch'] = 'master'})
+Plug('mg979/vim-visual-multi', { ['branch'] = 'master' })
 Plug('folke/todo-comments.nvim')
 
 -- Development
@@ -104,18 +104,18 @@ require('neoscroll').setup()
 require('todo-comments').setup()
 require('dressing').setup()
 require('regexplainer').setup({
-    display = 'popup',
-    popup = {
-      border = {
-        style = 'solid'
-      }
-    }
+  display = 'popup',
+  popup = {
+    border = {
+      style = 'solid',
+    },
+  },
 })
 vim.notify = require('notify')
 require('fidget').setup({
   sources = {
     ltex = {
-      ignore = true
-    }
-  }
+      ignore = true,
+    },
+  },
 })
