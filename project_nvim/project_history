@@ -23,7 +23,6 @@
 /home/cjnucette/.dotfiles/nvim.tuto/.config/nvim/plugged/nvim-lspconfig
 /home/cjnucette/.dotfiles/nvim.tuto/.config/nvim/plugged/nvim-lsp-installer
 /home/cjnucette/.dotfiles/nvim.tuto/.config/nvim/lsp_servers/svelte
-/home/cjnucette/.config/nvim
 /home/cjnucette/Workspace/code/portfolio/pricing-component
 /home/cjnucette/tmp
 /home/cjnucette/Workspace/code/rust/ownership
@@ -45,5 +44,8 @@
 /home/cjnucette/Workspace/code/rust/options
 /home/cjnucette/Workspace/code/eleventy-projects/eleventy-from-scratch
 /home/cjnucette/Workspace/code/rust/match_control_flow
+/home/cjnucette/Workspace/code/rust/if_let_control_flow
+/home/cjnucette/.config/nvim
+/home/cjnucette/Workspace/Web-Dev-For-Beginners
 /home/cjnucette/notes
 /home/cjnucette/.dotfiles/nvim.tuto/.config/nvim
