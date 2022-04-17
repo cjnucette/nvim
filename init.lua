@@ -1,5 +1,6 @@
--- Do lua filetype detection
+-- Do lua filetype detection without fallback
 vim.g.do_filetype_lua = 1
+vim.g.did_load_filetypes = 0
 
 require('plugins')
 require('settings')
