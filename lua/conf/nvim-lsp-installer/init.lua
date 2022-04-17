@@ -70,7 +70,7 @@ local on_attach = function(client, bufnr)
     lsp_format.on_attach(client)
   else
     if client.resolved_capabilities.document_formatting then
-      augroup('FormatOnSave', {})
+      augroup('FormatOnSave', { clear = true })
       autocmd('BufWritePre', {
         group = 'FormatOnSave',
         buffer = bufnr,
@@ -79,12 +79,13 @@ local on_attach = function(client, bufnr)
         end,
       })
 
-      vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
+      -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
+      vim.api.nvim_create_user_command('Format', vim.lsp.buf.formatting_sync, {})
     end
   end
 
   if client.resolved_capabilities.document_highlight then
-    augroup('HightlightWordUnderCursor', {})
+    augroup('HightlightWordUnderCursor', { clear = true })
     autocmd('CursorHold', {
       group = 'HightlightWordUnderCursor',
       buffer = bufnr,
