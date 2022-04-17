@@ -16,7 +16,7 @@ lspinstaller.settings({
 })
 
 -- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
-require('conf/nvim-lsp-installer/custom-servers/astro-ls')
+-- require('conf/nvim-lsp-installer/custom-servers/astro-ls')
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
@@ -48,6 +48,10 @@ end
 local capabilities = require('cmp_nvim_lsp').update_capabilities(setup_capabilities())
 
 local on_attach = function(client, bufnr)
+  if lsp_format_ok then
+    lsp_format.on_attach(client)
+  end
+
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   local opts = { buffer = 0 }
@@ -66,9 +70,7 @@ local on_attach = function(client, bufnr)
 
   map('n', '<leader>f', '<cmd>Format<cr>', opts)
 
-  if lsp_format_ok then
-    lsp_format.on_attach(client)
-  else
+  if not lsp_format_ok then
     if client.resolved_capabilities.document_formatting then
       augroup('FormatOnSave', { clear = true })
       autocmd('BufWritePre', {
@@ -79,7 +81,6 @@ local on_attach = function(client, bufnr)
         end,
       })
 
-      -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting_sync()']])
       vim.api.nvim_create_user_command('Format', vim.lsp.buf.formatting_sync, {})
     end
   end
