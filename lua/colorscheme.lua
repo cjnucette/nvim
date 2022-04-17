@@ -2,21 +2,13 @@
 local cmd = vim.cmd
 local set = vim.opt
 local hi = vim.api.nvim_set_hl
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+local command = vim.api.nvim_create_user_command
 
 -- Relevant options
 set.termguicolors = true
 set.background = 'dark'
-
--- Autocommads
-cmd([[
-augroup MyColor
-  autocmd!
-  autocmd! ColorScheme * lua MyHighlights()
-augroup END
-]])
-
--- prints colorgroup for the word under the cursor
-vim.cmd([[command! What echo synIDattr(synID(line('.'), col('.'), 1), 'name')]])
 
 function MyHighlights()
   local bg = require('utils').get_color('Normal', 'bg#')
@@ -30,6 +22,14 @@ function MyHighlights()
     -- hi(0, 'PmenuSel', { blend = 0 })
   end
 end
+
+-- Autocommads
+local mycolor = augroup('MyColor', { clear = true })
+autocmd('ColorScheme', { group = mycolor, callback = function() MyHighlights() end })
+
+-- Commands
+command('What', 'TSHighlightCapturesUnderCursor', { desc = 'Display color group of the word under the cursor' })
+
 
 -- Set colorscheme
 

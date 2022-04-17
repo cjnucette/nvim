@@ -1,10 +1,12 @@
 local execute = vim.api.nvim_command
+local autocmd = vim.api.nvim_create_autocmd
 
 if vim.fn.empty(vim.fn.glob('~/.config/nvim/autoload/plug.vim')) > 0 then
   execute(
     [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
   )
-  vim.cmd([[ autocmd VimEnter * PlugInstall --sync ]])
+  autocmd('VimEnter', { command = 'PlugInstall --sync' })
+  -- vim.cmd([[ autocmd VimEnter * PlugInstall --sync ]])
 end
 
 local Plug = vim.fn['plug#']
@@ -17,6 +19,7 @@ Plug('kyazdani42/nvim-web-devicons') -- various packages
 
 -- Treesitter
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+Plug('nvim-treesitter/playground')
 Plug('RRethy/nvim-treesitter-endwise')
 
 -- themes
