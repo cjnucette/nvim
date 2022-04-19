@@ -225,12 +225,12 @@ local ViMode = {
     provider = function(self)
       return self.mode_names[self.mode][1]:upper()
     end,
-    hl = { style = "bold" },
+    hl = { style = 'bold' },
   }, {
     provider = function(self)
       return self.mode_names[self.mode][2]:upper()
     end,
-    hl = { style = "bold" },
+    hl = { style = 'bold' },
   }),
 }
 
@@ -248,7 +248,7 @@ local Git = {
     provider = function(self)
       return ' ' .. self.status_dict.head
     end,
-    hl = { style = 'bold' },
+    -- hl = { style = 'bold' },
   },
   -- You could handle delimiters, icons and counts similar to Diagnostics
   utils.make_flexible_component(1, {
@@ -398,8 +398,8 @@ local FileType = {
 local LSPActive = {
   condition = conditions.lsp_attached,
 
-  -- provider = '',
-  provider = '',
+  provider = '',
+  -- provider = '',
 }
 
 local Spell = {
@@ -421,12 +421,24 @@ local Spell = {
 
 local LiveServer = {
   condition = function()
-    return require('live_server').has_start_scripts() or conditions.buffer_matches({filetype = {'html', 'css', 'js', 'ts'}})
+    return require('live_server').has_start_scripts() or conditions.buffer_matches({ filetype = { 'html', 'css', 'js', 'ts' } })
   end,
   Space,
   {
+    condition = function()
+      return require('live_server').is_active
+    end,
     provider = function()
-      return require('live_server').is_active and ' ' or '睊'
+      return ' '
+    end,
+    hl = { fg = colors.green },
+  },
+  {
+    condition = function()
+      return not require('live_server').is_active
+    end,
+    provider = function()
+      return '睊'
     end,
   }
 }
@@ -482,14 +494,14 @@ local PluginManagerStatusLine = {
 }
 
 local CheckhealthStatusLine = {
-  condition = function ()
-    return conditions.buffer_matches({ filetype = {'checkhealth'}})
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'checkhealth' } })
   end,
 
   Delimiter,
   {
     provider = ' ',
-    hl = { fg = colors.red}
+    hl = { fg = colors.red }
   },
   {
     provider = 'Checkhealth%='
@@ -559,10 +571,10 @@ local Statusline = {
     --   }
     -- else
     return {
-        fg = utils.get_highlight('Comment').fg,
-        bg = utils.get_highlight('Comment').bg,
-        -- fg = utils.get_highlight('StatuslineNC').fg,
-        -- bg = utils.get_highlight('StatuslineNC').bg,
+      fg = utils.get_highlight('Comment').fg,
+      bg = utils.get_highlight('Comment').bg,
+      -- fg = utils.get_highlight('StatuslineNC').fg,
+      -- bg = utils.get_highlight('StatuslineNC').bg,
     }
     -- end
   end,
