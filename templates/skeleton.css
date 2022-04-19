@@ -24,8 +24,6 @@
   --clr-neutral-500: hsl(197, 16%, 92%);
   --clr-neutral-900: hsl(0, 0%, 0%);
   --clr-primary: hsl(245, 66%, 41%); /* 30%  main color, brand color */
-
-  --shw-x-offset: 2px;
 }
 
 /* CSS */
@@ -55,13 +53,13 @@
  * */
 
 .container {
-  width: min(100% - 2rem, 60ch);
+  width: min(100% - var(--padding, 2rem), var(--max-width, 60ch));
   margin-inline: auto;
 }
 
 .shadow {
-  box-shadow: var(--shw-x-offset) calc(var(--shw-x-offset) * 2)
-    calc(var(--shw-x-offset) * 2) hsl(0deg 0% 0% / 0.5);
+  box-shadow: var(--shw-x-offset, 2px) calc(var(--shw-x-offset, 2px) * 2)
+    calc(var(--shw-x-offset, 2px) * 2) hsl(0deg 0% 0% / 0.5);
 }
 
 /* Block
