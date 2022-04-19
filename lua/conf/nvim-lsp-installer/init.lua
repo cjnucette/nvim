@@ -15,7 +15,6 @@ lspinstaller.settings({
   install_root_dir = vim.fn.stdpath('config') .. '/lsp_servers',
 })
 
--- require('conf/nvim-lsp-installer/custom-servers/ls_emmet')
 -- require('conf/nvim-lsp-installer/custom-servers/astro-ls')
 
 local augroup = vim.api.nvim_create_augroup

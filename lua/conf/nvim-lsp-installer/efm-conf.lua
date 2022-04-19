@@ -36,7 +36,7 @@ local shellcheck = {
 }
 
 local shfmt = {
-  formatCommand = 'shfmt ${-i:tabWidth}'
+  formatCommand = 'shfmt -i 2 -ci -bn'
 }
 
 M.languages = {
@@ -49,7 +49,6 @@ M.languages = {
   typescript = { prettier },
   typescriptreact = { prettier },
   astro = { prettier },
-  nunjucks = { prettier },
   vim = { vint },
   sh = { shellcheck, shfmt }
 }
