@@ -22,7 +22,10 @@ require('nvim-treesitter.configs').setup({
     'nix',
     'regex',
   },
-  highlight = { enable = true, disable = { 'html' } },
+  highlight = {
+    enable = true,
+    disable = { 'html' }
+  },
   indent = { enable = true, disable = { 'html', 'css', 'typescriptreact' } },
   matchup = {
     enable = true,
