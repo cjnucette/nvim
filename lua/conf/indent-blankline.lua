@@ -1,5 +1,8 @@
 local indent_ok, indent = pcall(require, 'indent_blankline')
-if not indent_ok then return end
+if not indent_ok then
+  print('Indent_blankline not loaded')
+  return
+end
 
 -- vim.cmd([[highlight IndentBlanklineContextChar guifg=#00FF00 gui=nocombine]])
 -- vim.cmd([[highlight IndentBlanklineContextStart guisp=#00FF00 gui=underline]])
