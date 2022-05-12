@@ -4,12 +4,14 @@ if not heirline_ok then
 end
 
 -- Autocommands
-vim.cmd([[
-augroup heirline
-    autocmd!
-    autocmd ColorScheme * lua require'heirline'.reset_highlights(); vim.cmd('luafile  ~/.config/nvim/lua/conf/heirline.lua')
-augroup END
-]])
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+local Heirline = augroup('Heirline', { clear = true })
+autocmd('ColorScheme', { group = Heirline, callback = function()
+  require('heirline').reset_highlights()
+  vim.cmd('luafile  ~/.config/nvim/lua/conf/heirline.lua')
+end })
 
 -- Abbreviations
 local api = vim.api
@@ -36,6 +38,7 @@ local colors = {
   orange = utils.get_highlight('DiagnosticWarn').fg,
   purple = utils.get_highlight('Statement').fg,
   cyan = utils.get_highlight('Special').fg,
+  white = '#FFFFFF',
   diag = {
     warning = utils.get_highlight('DiagnosticWarn').fg,
     error = utils.get_highlight('DiagnosticError').fg,
@@ -67,10 +70,11 @@ local LongDiag = {
       return self.diagnostics['error'] > 0
     end,
     {
+      hl = { fg = colors.diag.error },
+
       provider = function()
         return (signs.error .. ' ')
       end,
-      hl = { fg = colors.diag.error },
     },
     {
       provider = function(self)
@@ -83,10 +87,11 @@ local LongDiag = {
       return self.diagnostics['warning'] > 0
     end,
     {
+      hl = { fg = colors.diag.warning },
+
       provider = function()
         return (signs.warning .. ' ')
       end,
-      hl = { fg = colors.diag.warning },
     },
     {
       provider = function(self)
@@ -99,10 +104,11 @@ local LongDiag = {
       return self.diagnostics['information'] > 0
     end,
     {
+      hl = { fg = colors.diag.information },
+
       provider = function()
         return (signs.information .. ' ')
       end,
-      hl = { fg = colors.diag.information },
     },
     {
       provider = function(self)
@@ -115,10 +121,11 @@ local LongDiag = {
       return self.diagnostics['hint'] > 0
     end,
     {
+      hl = { fg = colors.diag.hint },
+
       provider = function()
         return (signs.hint .. ' ')
       end,
-      hl = { fg = colors.diag.hint },
     },
     {
       provider = function(self)
@@ -134,10 +141,11 @@ local ShortDiag = {
       return self.diagnostics['error'] > 0
     end,
     {
+      hl = { fg = colors.diag.error },
+
       provider = function()
         return '·'
       end,
-      hl = { fg = colors.diag.error },
     },
   },
   {
@@ -145,10 +153,11 @@ local ShortDiag = {
       return self.diagnostics['warning'] > 0
     end,
     {
+      hl = { fg = colors.diag.warning },
+
       provider = function()
         return '·'
       end,
-      hl = { fg = colors.diag.warning },
     },
   },
   {
@@ -156,10 +165,11 @@ local ShortDiag = {
       return self.diagnostics['information'] > 0
     end,
     {
+      hl = { fg = colors.diag.information },
+
       provider = function()
         return '·'
       end,
-      hl = { fg = colors.diag.information },
     },
   },
   {
@@ -167,10 +177,11 @@ local ShortDiag = {
       return self.diagnostics['hint'] > 0
     end,
     {
+      hl = { fg = colors.diag.hint },
+
       provider = function()
         return '·'
       end,
-      hl = { fg = colors.diag.hint },
     },
   },
 }
@@ -193,6 +204,7 @@ local ViMode = {
   init = function(self)
     self.mode = vim.fn.mode(1)
   end,
+
   static = {
     mode_names = setmetatable({
       n = { 'Normal', 'N' },
@@ -221,16 +233,19 @@ local ViMode = {
       end,
     }),
   },
+
   utils.make_flexible_component(1, {
+    hl = { bold = true },
+
     provider = function(self)
       return self.mode_names[self.mode][1]:upper()
     end,
-    hl = { style = 'bold' },
   }, {
+    hl = { bold = true },
+
     provider = function(self)
       return self.mode_names[self.mode][2]:upper()
     end,
-    hl = { style = 'bold' },
   }),
 }
 
@@ -245,10 +260,11 @@ local Git = {
   -- hl = { fg = colors.orange },
 
   { -- git branch name
+    -- hl = { bold = true },
+
     provider = function(self)
       return ' ' .. self.status_dict.head
     end,
-    -- hl = { style = 'bold' },
   },
   -- You could handle delimiters, icons and counts similar to Diagnostics
   utils.make_flexible_component(1, {
@@ -259,25 +275,28 @@ local Git = {
       provider = ' | ',
     },
     {
+      hl = { fg = colors.git.added },
+
       provider = function(self)
         local count = self.status_dict.added or 0
         return count > 0 and ('+' .. count)
       end,
-      hl = { fg = colors.git.added },
     },
     {
+      hl = { fg = colors.git.removed },
+
       provider = function(self)
         local count = self.status_dict.removed or 0
         return count > 0 and ('-' .. count)
       end,
-      hl = { fg = colors.git.removed },
     },
     {
+      hl = { fg = colors.git.changed },
+
       provider = function(self)
         local count = self.status_dict.changed or 0
         return count > 0 and ('~' .. count)
       end,
-      hl = { fg = colors.git.changed },
     },
   }, {
     provider = '',
@@ -326,6 +345,9 @@ local FileName = {
 
     self.filename = fname ~= '' and fname or '[No Name]'
   end,
+
+  -- hl = { bg = utils.get_highlight('Normal').bg }, -- ???
+
   utils.make_flexible_component(1, {
     provider = function(self)
       return self.filename
@@ -351,7 +373,6 @@ local FileName = {
       end
     }
   }),
-  -- hl = { bg = utils.get_highlight('Normal').bg }, -- ???
 }
 
 local FileIcon = {
@@ -363,11 +384,13 @@ local FileIcon = {
     local extension = vim.fn.fnamemodify(filename, ':e')
     self.icon, self.icon_color = devicons.get_icon_color(filename, extension, { default = true })
   end,
-  provider = function(self)
-    return self.icon and (self.icon .. ' ')
-  end,
+
   hl = function(self)
     return { fg = self.icon_color }
+  end,
+
+  provider = function(self)
+    return self.icon and (self.icon .. ' ')
   end,
 }
 
@@ -428,15 +451,18 @@ local LiveServer = {
     condition = function()
       return require('live_server').is_active
     end,
+
+    hl = { fg = colors.green },
+
     provider = function()
       return ' '
     end,
-    hl = { fg = colors.green },
   },
   {
     condition = function()
       return not require('live_server').is_active
     end,
+
     provider = function()
       return '睊'
     end,
@@ -451,8 +477,9 @@ local TerminalStatusLine = {
   Delimiter,
   { condition = conditions.is_active, ViMode, Space },
   {
-    provider = '  ',
     hl = { fg = colors.folder },
+
+    provider = '  ',
   },
   {
     provider = 'Terminal%=',
@@ -467,8 +494,9 @@ local FileExplorerStatusLine = {
 
   Delimiter,
   {
-    provider = '  ',
     hl = { fg = colors.folder },
+
+    provider = '  ',
   },
   {
     provider = 'File Explorer%=',
@@ -483,8 +511,9 @@ local PluginManagerStatusLine = {
 
   Delimiter,
   {
-    provider = '  ',
     hl = { fg = colors.folder },
+
+    provider = '  ',
   },
   {
     provider = 'Plugin Manager%=',
@@ -500,8 +529,9 @@ local CheckhealthStatusLine = {
 
   Delimiter,
   {
+    hl = { fg = colors.red },
+
     provider = ' ',
-    hl = { fg = colors.red }
   },
   {
     provider = 'Checkhealth%='
@@ -517,8 +547,9 @@ local HttpStatusLine = {
 
   Delimiter,
   {
-    provider = ' 爵 ',
     hl = { fg = colors.folder },
+
+    provider = ' 爵 ',
   },
   {
     provider = 'Http Result%=',
@@ -550,6 +581,7 @@ local DefaultStatusLine = {
   LiveServer,
   Delimiter,
 }
+
 local InactiveStatusLine = {
   condition = function()
     return not conditions.is_active()
@@ -563,23 +595,24 @@ local InactiveStatusLine = {
 }
 
 local Statusline = {
+  init = utils.pick_child_on_condition,
+
   hl = function()
-    -- if conditions.is_active() then
-    --   return {
-    --     -- fg = utils.get_highlight('Statusline').fg,
-    --     -- bg = utils.get_highlight('Statusline').bg,
-    --   }
-    -- else
-    return {
-      fg = utils.get_highlight('Comment').fg,
-      bg = utils.get_highlight('Comment').bg,
-      -- fg = utils.get_highlight('StatuslineNC').fg,
-      -- bg = utils.get_highlight('StatuslineNC').bg,
-    }
-    -- end
+    if conditions.is_active() then
+      return {
+        -- fg = utils.get_highlight('Statusline').fg,
+        -- bg = utils.get_highlight('Statusline').bg,
+        fg = colors.white,
+        bg = utils.get_highlight('PmenuSel').bg,
+      }
+    else
+      return {
+        fg = utils.get_highlight('StatuslineNC').fg,
+        bg = utils.get_highlight('StatuslineNC').bg,
+      }
+    end
   end,
 
-  init = utils.pick_child_on_condition,
 
   TerminalStatusLine,
   FileExplorerStatusLine,
