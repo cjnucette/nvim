@@ -12,14 +12,9 @@ set.background = 'dark'
 
 function MyHighlights()
   local bg = require('utils').get_color('Normal', 'bg#')
-  -- cmd([[hi EndOfBuffer guifg=bg]])
-  hi(0, 'EndOfBuffer', { fg = bg })
-  -- palenight fix; otherwise remove it or change it accordingly
-  -- hi(0, 'Pmenu', { bg = '#202331'})
-  -- hi(0, 'PmenuSel', { bg = '#202331'})
+  -- hi(0, 'EndOfBuffer', { fg = bg })
   if vim.fn.exists('+pumblend') then
     cmd([[hi PmenuSel blend=0]])
-    -- hi(0, 'PmenuSel', { blend = 0 })
   end
 end
 
@@ -34,9 +29,23 @@ command('What', 'TSHighlightCapturesUnderCursor', { desc = 'Display color group 
 -- Set colorscheme
 
 -- theme styles: oceanic | deep ocean | palenight | lighter | darker
-vim.g.material_italic_comments = true
-vim.g.material_italic_keywords = true
-vim.g.material_italic_functions = true
+require('material').setup({
+  contrast = {
+    popup_menu = true
+  },
+  italics = {
+    comments = true,
+    keywords = true,
+    functions = true,
+  },
+  disable = {
+    eob_lines = true
+  },
+  custom_colors = {
+    accent = '#009688'
+  }
+})
+
 vim.g.material_style = 'palenight'
 cmd([[colorscheme material]])
 
