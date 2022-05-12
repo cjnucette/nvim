@@ -8,14 +8,6 @@ augroup('Terminal', {})
 autocmd('TermOpen', { group = 'Terminal', pattern = '*', command = [[tnoremap <buffer> <Esc> <c-\><c-n>]]})
 autocmd('TermOpen', { group = 'Terminal', pattern = '*', command = [[set nonu]]})
 
--- cmd [[
---   augroup center_buffer_remember_cursor_pos
---     autocmd!
---     autocmd BufRead * normal zz
---     autocmd VimResized * :wincmd =
---     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
---   augroup END
--- ]]
 augroup('CenterBufferRememberCursorPosition', {})
 autocmd('BufRead', { group = 'CenterBufferRememberCursorPosition', pattern = '*', command = [[:normal zz]]})
 autocmd('VimResized', { group = 'CenterBufferRememberCursorPosition', pattern = '*', command = [[:wincmd =]]})
@@ -28,12 +20,6 @@ autocmd(
   }
 )
 
--- cmd [[
--- augroup fix_devicon_color
---   autocmd!
---   autocmd ColorScheme * lua require('nvim-web-devicons').setup();
--- augroup END
--- ]]
 augroup('FixDevIconColor', {})
 autocmd(
   'ColorScheme',
@@ -45,12 +31,6 @@ autocmd(
 )
 
 -- depends on pandoc (https://pandoc.org) be intalled
--- cmd [[
--- augroup read_word_docs
---   autocmd!
---   autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt silent %!pandoc "%" -tplain -o /dev/stdout
--- augroup END
--- ]]
 augroup('ReadOfficeDocuments', {})
 autocmd(
   'BufReadPost',
@@ -61,12 +41,6 @@ autocmd(
   }
 )
 
--- cmd [[
--- augroup refresh_on_change
---   autocmd!
---   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *  if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
--- augroup END
--- ]]
 augroup('RefreshBufferOnExternalChange', {})
 autocmd(
   {'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI'},
