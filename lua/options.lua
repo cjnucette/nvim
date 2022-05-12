@@ -18,7 +18,6 @@ set.splitright = true
 set.cursorline = true
 set.wrap = false
 set.digraph = true
-set.foldmethod = 'manual'
 set.nrformats:append({ 'alpha' })
 set.ignorecase = true
 set.smartcase = true
@@ -26,7 +25,7 @@ set.incsearch = true
 set.list = true
 -- set.listchars = { tab = '>-', space = '·' }
 set.listchars = { tab = '>-', trail = '·' }
-set.clipboard:append({'unnamed', 'unnamedplus'})
+set.clipboard:append({ 'unnamed', 'unnamedplus' })
 set.scrolloff = 3
 set.autoread = true
 -- opt.fillchars:append('eob:\')
@@ -65,7 +64,13 @@ set.updatetime = 300 --Smaller update time for CursorHold & CursorHoldI
 set.foldenable = true
 set.foldlevel = 99
 set.foldmethod = 'expr'
-set.foldexpr = 'nvim_treesitter#foldexpr'
+-- set.foldexpr = vim.fn['nvim_treesitter#foldexpr']()
+cmd([[ set foldexpr=nvim_treesitter#foldexpr() ]])
+-- set.foldtext = vim.fn.getline(vim.v.foldstart) .. '...' .. vim.fn.trim(vim.v.foldend)
+cmd([[ set foldtext=getline(v:foldstart).'...'.trim(getline(v:foldend)) ]])
+set.foldnestmax = 3
+set.foldminlines = 1
+set.fillchars = { fold = ' ' }
 
 --- end coc ---
 --enable bash aliases
