@@ -70,7 +70,7 @@ local on_attach = function(client, bufnr)
   map('n', '<leader>f', '<cmd>Format<cr>', opts)
 
   if not lsp_format_ok then
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
       augroup('FormatOnSave', { clear = true })
       autocmd('BufWritePre', {
         group = 'FormatOnSave',
@@ -84,7 +84,7 @@ local on_attach = function(client, bufnr)
     end
   end
 
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.document_highlight then
     augroup('HightlightWordUnderCursor', { clear = true })
     autocmd('CursorHold', {
       group = 'HightlightWordUnderCursor',
@@ -118,8 +118,8 @@ local custom_server_options = {
     add('~/.config/nvim/plugged/*')
 
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = true
-      client.resolved_capabilities.document_range_formatting = true
+      client.server_capabilities.document_formatting = true
+      client.server_capabilities.document_range_formatting = true
       on_attach(client, bufnr)
     end
 
@@ -164,8 +164,8 @@ local custom_server_options = {
 
   ['tsserver'] = function(opts)
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
   end,
@@ -176,16 +176,16 @@ local custom_server_options = {
 
   ['html'] = function(opts)
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
   end,
 
   ['jsonls'] = function(opts)
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
     opts.settings = {
@@ -199,7 +199,7 @@ local custom_server_options = {
             url = 'https://deno.land/x/deno/cli/schemas/config-file.v1.json',
           },
         }, require(
-          'schemastore'
+        'schemastore'
         ).json.schemas()),
       },
     }
@@ -228,8 +228,8 @@ local custom_server_options = {
 
   ['emmet_ls'] = function(opts)
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
     end
   end,
@@ -267,4 +267,11 @@ require('lspconfig').gopls.setup({
   flags = {
     debounce_text_changes = 150,
   },
+})
+
+-- astro
+require('lspconfig').astro.setup({
+  on_attach = on_attach,
+  handlers = handlers,
+  capabilities = capabilities,
 })
