@@ -3,7 +3,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 if vim.fn.empty(vim.fn.glob('~/.config/nvim/autoload/plug.vim')) > 0 then
   execute(
-    [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
+  [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
   )
   autocmd('VimEnter', { command = 'PlugInstall --sync' })
   -- vim.cmd([[ autocmd VimEnter * PlugInstall --sync ]])
@@ -45,13 +45,14 @@ Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-vsnip')
 Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', { ['do'] = 'npm install' })
+Plug('dsznajder/vscode-es7-javascript-react-snippets', { ['do'] = 'yarn install --frozen-lockfile && yarn compile' })
 
 -- emmet (lsp versions suck)
 Plug('mattn/emmet-vim')
 
 -- formatter
 -- Plug('mhartington/formatter.nvim')
-Plug('lukas-reineke/lsp-format.nvim')
+Plug('lukas-reineke/lsp-format.nvim') -- and efm language server
 
 -- statusline
 Plug('rebelot/heirline.nvim')
@@ -66,7 +67,6 @@ Plug('lewis6991/gitsigns.nvim')
 Plug('tpope/vim-fugitive')
 
 -- file explorer
--- Plug('kyazdani42/nvim-tree.lua')
 Plug('nvim-neo-tree/neo-tree.nvim')
 
 -- others
@@ -92,6 +92,7 @@ Plug('bennypowers/nvim-regexplainer') -- deps: nui,plenary
 Plug('b0o/schemastore.nvim')
 Plug('mg979/vim-visual-multi', { ['branch'] = 'master' })
 Plug('folke/todo-comments.nvim')
+Plug('Mofiqul/trld.nvim')
 
 -- Development
 -- Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')
@@ -102,10 +103,11 @@ vim.call('plug#end')
 -- Enable plugins with default configurarion
 
 require('nvim-autopairs').setup({ check_ts = true })
-require('Comment').setup()
+require('Comment').setup({})
 require('neoscroll').setup()
 require('todo-comments').setup()
 require('dressing').setup()
+require('trld').setup()
 require('regexplainer').setup({
   display = 'popup',
   popup = {
