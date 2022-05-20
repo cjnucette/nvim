@@ -48,19 +48,6 @@ body {
   }
 }
 
-h4 {
-  font-size: var(--fs-600);
-}
-h3 {
-  font-size: var(--fs-700);
-}
-h2 {
-  font-size: var(--fs-800);
-}
-h1 {
-  font-size: var(--fs-900);
-}
-
 h1,
 h2,
 h3,

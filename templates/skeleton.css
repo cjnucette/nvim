@@ -28,6 +28,18 @@
 
 /* CSS */
 /* set global fonts and color to take advantage of the cascade and inheritance */
+h4 {
+  font-size: var(--fs-600);
+}
+h3 {
+  font-size: var(--fs-700);
+}
+h2 {
+  font-size: var(--fs-800);
+}
+h1 {
+  font-size: var(--fs-900);
+}
 
 /* Composition Layer
  *
@@ -57,9 +69,13 @@
   margin-inline: auto;
 }
 
-.shadow {
-  box-shadow: var(--shw-x-offset, 2px) calc(var(--shw-x-offset, 2px) * 2)
-    calc(var(--shw-x-offset, 2px) * 2) hsl(0deg 0% 0% / 0.5);
+.fluid {
+  font-size: clamp(var(--fs-700, 2rem), 4vw + 1rem, var(--fs-800, 3rem));
+}
+
+[class*="box-shadow"] {
+  --box-shadow: var(--vo, 0) var(--ho, 0) var(--blur, 0.5rem) var(--spread, 0)
+    rgb(var(--color, 0 0 0) / var(--opacity, 0.15));
 }
 
 /* Block
