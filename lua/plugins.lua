@@ -21,6 +21,7 @@ Plug('kyazdani42/nvim-web-devicons') -- various packages
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
 Plug('nvim-treesitter/playground')
 Plug('RRethy/nvim-treesitter-endwise')
+Plug('SmiteshP/nvim-gps')
 
 -- themes
 Plug('marko-cerovac/material.nvim')
