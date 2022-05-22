@@ -10,7 +10,7 @@ if not saga_ok then
     severity_sort = true,
     float = {
       focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
       show_header = false,
       source = 'always',
       border = 'rounded',
@@ -25,11 +25,23 @@ if not saga_ok then
     --   },
     -- },
   })
+
+  local diagnostic_active = true
+  local toggle_diagnostics = function()
+    diagnostic_active = not diagnostic_active
+    if diagnostic_active then
+      vim.diagnostic.show()
+    else
+      vim.diagnostic.hide()
+    end
+  end
+
   -- mappings
   map('n', '<leader>dn', vim.diagnostic.goto_next)
   map('n', '<leader>dp', vim.diagnostic.goto_prev)
   map('n', '<leader>ds', vim.diagnostic.open_float)
   map('n', '<leader>da', vim.diagnostic.setloclist)
+  map('n', '<leader>dt', toggle_diagnostics)
 end
 
 -- Diagnostic Signs
@@ -44,4 +56,3 @@ vim.fn.sign_define('DiagnosticSignHint', { text = signs.hint, texthl = 'Diagnost
 --     autocmd CursorHold <buffer> lua vim.diagnostic.open_float(0, {scope = 'line', border = 'single'})
 --   augroup END
 -- ]])
-
