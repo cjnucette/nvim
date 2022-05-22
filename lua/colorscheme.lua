@@ -22,6 +22,10 @@ end
 local mycolor = augroup('MyColor', { clear = true })
 autocmd('ColorScheme', { group = mycolor, callback = function() MyHighlights() end })
 
+-- define the following to modify color group of a specific theme
+-- local theme = augroup('Theme', { clear = true })
+-- autocmd('ColorScheme', { group = theme, pattern="theme", command='hi clear ColorGroup | hi link ColorGroup AnotherGroup'})
+
 -- Commands
 command('What', 'TSHighlightCapturesUnderCursor', { desc = 'Display color group of the word under the cursor' })
 
@@ -45,7 +49,6 @@ require('material').setup({
     accent = '#009688'
   }
 })
-
 vim.g.material_style = 'palenight'
 cmd([[colorscheme material]])
 
