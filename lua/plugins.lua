@@ -3,7 +3,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 if vim.fn.empty(vim.fn.glob('~/.config/nvim/autoload/plug.vim')) > 0 then
   execute(
-  [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
+    [[silent !curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim]]
   )
   autocmd('VimEnter', { command = 'PlugInstall --sync' })
   -- vim.cmd([[ autocmd VimEnter * PlugInstall --sync ]])
@@ -103,7 +103,6 @@ vim.call('plug#end')
 
 -- Enable plugins with default configurarion
 
-require('nvim-autopairs').setup({ check_ts = true })
 require('Comment').setup({})
 require('neoscroll').setup()
 require('todo-comments').setup()
@@ -124,4 +123,7 @@ require('fidget').setup({
       ignore = true,
     },
   },
+})
+require('nvim-autopairs').setup({
+  check_ts = true
 })
