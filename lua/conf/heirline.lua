@@ -469,6 +469,11 @@ local LiveServer = {
   }
 }
 
+local Gps = {
+  condition = require('nvim-gps').is_available,
+  provider = require('nvim-gps').get_location
+}
+
 local TerminalStatusLine = {
   condition = function()
     return conditions.buffer_matches({ buftype = { 'terminal' } })
@@ -623,4 +628,40 @@ local Statusline = {
   DefaultStatusLine,
 }
 
-heirline.setup(Statusline)
+local WinBars = {
+  -- init = utils.pick_child_on_condition,
+  { -- Hide the winbar for special buffers
+    condition = function()
+      return conditions.buffer_matches({
+        buftype = { 'nofile', 'prompt', 'help', 'quickfix', 'terminal' },
+        filetype = { '^git.*', 'fugitive' },
+      })
+    end,
+    provider = '',
+  },
+  {
+    hl = function()
+      return { bg = utils.get_highlight('LineNr').bg, fg = utils.get_highlight('LineNr').fg }
+    end
+  },
+  -- A winbar for regular files
+  Delimiter,
+  FileIcon,
+  FileName,
+  -- {
+  --   init = function(self)
+  --     -- local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t')
+  --
+  --     self.filename = vim.fn.expand('%:t')
+  --   end,
+  --   provider = function(self)
+  --     return self.filename
+  --   end
+  -- },
+  {
+    provider = ' > '
+  },
+  Gps
+}
+
+heirline.setup(Statusline, WinBars)
