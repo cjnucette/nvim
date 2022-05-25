@@ -51,6 +51,11 @@ h1 {
  * Create consistent flow a rythm
  */
 
+[class*="grid-"] {
+  display: grid;
+  gap: 1rem;
+}
+
 .flow > * + * {
   margin-top: var(--flow-spacer, 1rem);
 }
@@ -69,7 +74,7 @@ h1 {
   margin-inline: auto;
 }
 
-.fluid {
+.fluid-font {
   font-size: clamp(var(--fs-700, 2rem), 4vw + 1rem, var(--fs-800, 3rem));
 }
 
