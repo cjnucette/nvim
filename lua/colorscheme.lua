@@ -54,7 +54,7 @@ cmd([[colorscheme material]])
 
 -- vim.g.onedark_hide_endofbuffer=1
 -- vim.g.onedark_terminal_italics=1
--- colorscheme onedark
+-- cmd([[colorscheme onedark]])
 
 -- vim.g.oceanic_bold=1
 -- vim.g.oceanic_italic_comments=1

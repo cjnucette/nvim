@@ -31,6 +31,8 @@ M.capabilities = require('cmp_nvim_lsp').update_capabilities(setup_capabilities(
 
 M.on_attach = function(client, bufnr)
   local telescope_ok, _ = pcall(require, 'telescope')
+  local saga_ok, _ = pcall(require, 'lspsaga')
+
   local lsp_format_ok, lsp_format = pcall(require, 'lsp-format')
   if lsp_format_ok then
     lsp_format.setup {}
@@ -43,7 +45,7 @@ M.on_attach = function(client, bufnr)
   -- mappings
   if not saga_ok then
     map('n', 'K', vim.lsp.buf.hover, opts)
-    map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+    map('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = 0, desc = 'Shows available code actions' })
     map('n', '<F2>', vim.lsp.buf.rename, opts)
   end
 
@@ -53,7 +55,7 @@ M.on_attach = function(client, bufnr)
     map('n', 'gI', vim.lsp.buf.implementation, opts)
   end
 
-  map('n', '<leader>f', '<cmd>Format<cr>', opts)
+  map('n', '<leader>f', '<cmd>Format<cr>', { buffer = 0, desc = 'Format current buffer' })
 
   if not lsp_format_ok then
     if client.server_capabilities.document_formatting then

@@ -58,21 +58,20 @@ function M.nvim_config()
 end
 
 -- mappings
-map('n', '<C-p>', '<cmd>lua require("conf/telescope").project_files()<cr>')
-map('n', '<leader>tb', '<cmd>Telescope buffers<CR>')
-map('n', '<leader>tr', '<cmd>Telescope neoclip<CR>')
-map('n', '<leader>th', '<cmd>Telescope help_tags<CR>')
-map('n', '<leader>tf', '<cmd>Telescope file_browser<CR>')
-map('n', '<leader>tg', '<cmd>Telescope live_grep<CR>')
-map('n', '<leader>tp', '<cmd>Telescope projects<CR>')
-map('n', '<leader>tn', '<cmd>lua require("conf/telescope").notes()<cr>')
-map('n', '<leader>tc', '<cmd>lua require("conf/telescope").nvim_config()<cr>')
+map('n', '<C-p>', '<cmd>lua require("conf/telescope").project_files()<cr>', { desc = 'Searches for files' })
+map('n', '<leader>tb', '<cmd>Telescope buffers<CR>', { desc = 'Searches for buffers ' })
+map('n', '<leader>tr', '<cmd>Telescope neoclip<CR>', { desc = 'Searches in clipboard' })
+map('n', '<leader>th', '<cmd>Telescope help_tags<CR>', { desc = 'Searches in help' })
+map('n', '<leader>tf', '<cmd>Telescope file_browser<CR>', { desc = 'Shows file explorer' })
+map('n', '<leader>tg', '<cmd>Telescope live_grep<CR>', { desc = 'Shows matching greps results' })
+map('n', '<leader>tp', '<cmd>Telescope projects<CR>', { desc = 'Searches for projects' })
+map('n', '<leader>tn', '<cmd>lua require("conf/telescope").notes()<cr>', { desc = 'Searches within ~/notes' })
+map('n', '<leader>tc', '<cmd>lua require("conf/telescope").nvim_config()<cr>', { desc = 'Searches within ~/.config/nvim' })
 
 -- lsp and diagnostic mappings
-local opts = { buffer = 0 }
-map('n', 'gd', '<cmd>Telescope lsp_definition<cr>', opts)
-map('n', 'gT', '<cmd>Telescope lsp_type_definition<cr>', opts)
-map('n', 'gI', '<cmd>Telescope lsp_implementation<cr>', opts)
-map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', opts)
+map('n', 'gd', '<cmd>Telescope lsp_definition<cr>', { buffer = 0, desc = 'jumps to the definition for the word under the cursor' })
+map('n', 'gT', '<cmd>Telescope lsp_type_definition<cr>', { buffer = 0, desc = 'Jumps to the type definition for the word under the cursor' })
+map('n', 'gI', '<cmd>Telescope lsp_implementation<cr>', { buffer = 0, desc = 'Jumps to the implementation' })
+map('n', '<leader>la', '<cmd>Telescope diagnostics<cr>', { buffer = 0, desc = 'Shows diagnostics in telescope' })
 
 return M

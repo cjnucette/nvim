@@ -11,18 +11,18 @@ local config = {
       symbols = {
         -- Change type
         -- NOTE: you can set any of these to an empty string to not show them
-        added     = "+", -- 002b: +
-        deleted   = "", -- f655: 
-        modified  = "·", -- 00b7: ·
-        renamed   = "", -- f553: 
+        added     = '+', -- 002b: +
+        deleted   = '', -- f655: 
+        modified  = '·', -- 00b7: ·
+        renamed   = '', -- f553: 
         -- Status type
-        untracked = "?", -- 003f: ?
-        ignored   = "ﯰ", -- 
-        unstaged  = "",
-        staged    = "", -- f634: 
-        conflict  = "",
+        untracked = '?', -- 003f: ?
+        ignored   = 'ﯰ', -- 
+        unstaged  = '',
+        staged    = '', -- f634: 
+        conflict  = '',
       },
-      align = "right",
+      align = 'right',
     },
   },
   window = { -- see https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup for
@@ -30,13 +30,13 @@ local config = {
     position = 'float',
     popup = { -- settings that apply to float position only
       size = {
-        height = "70%",
-        width = "50%",
+        height = '70%',
+        width = '50%',
       },
     },
     mappings = {
-      ["l"] = "open",
-      ["h"] = "close_node",
+      ['l'] = 'open',
+      ['h'] = 'close_node',
     },
   },
   filesystem = {
@@ -49,5 +49,5 @@ local config = {
 neotree.setup(config);
 
 -- mappings
-map('n', '<leader>e', '<cmd>NeoTreeReveal<CR>')
+map('n', '<leader>e', '<cmd>NeoTreeReveal<CR>', { desc = 'Shows file explorer' })
 -- map('n', '<leader>ef', '<cmd>NeoTreeFloatToggle<CR>')

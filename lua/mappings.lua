@@ -5,27 +5,27 @@ local map = require('utils').map
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- key-menu conf
+vim.o.timeoutlen = 300
+require('key-menu').set('n', '<space>')
+
 -- maps
-map('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>')
-map('n', '<leader>sv', '<cmd>source $MYVIMRC<cr>')
-map('n', '<leader>w', '<cmd>w!<cr>')
-map('n', '<leader>q', '<cmd>q!<cr>')
-map('n', '<leader>x', '<cmd>x!<cr>')
-map('n', '<leader><space>', 'za')
+map('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>', { desc = 'Loads init.lua' })
+map('n', '<leader>sv', '<cmd>source $MYVIMRC<cr>', { desc = 'Sources init.lua' })
+map('n', '<leader>w', '<cmd>w!<cr>', { desc = 'Saves buffer' })
+map('n', '<leader>q', '<cmd>q!<cr>', { desc = 'Quit nvim' })
+map('n', '<leader>x', '<cmd>x!<cr>', { desc = 'Saves and quit nvim' })
+map('n', '<leader><space>', 'za', { desc = 'Unfold all' })
 map('v', '<leader><space>', 'za')
-map('n', '<leader>u', 'vb~A')
-map('n', '<leader>cd', '<cmd>cd %:p:h<cr>')
---various searches
-map('n', '<leader>gh', "<cmd>h <c-r>=expand('<cword>')<cr><cr>")
-map('n', '<leader>*', '<cmd>grep -R <cword> * --exclude-dir={node_modules,.git}<cr><cr>')
--- map('n', '<leader>gr', "<cmd>CocSearch <c-r>=expand('<cword>')<cr><cr>")
-map('n', '<leader>gg', "<cmd>Rg <c-r>=expand('<cword>')<cr><cr>")
+map('n', '<leader>u', 'vb~A', { desc = 'Change case of previous word' })
+map('n', '<leader>cd', '<cmd>cd %:p:h<cr>', { desc = 'Change to the directory of the current file' })
+map('n', '<leader>k', ':h <c-r><c-w><cr>', { desc = 'Gets help for the word under the cursor' })
 
 -- Searches for the text last replaced and repeat the replace.
-map('n', 'g.', [[/\V<C-r>"<CR>cgn<C-a><Esc>]])
+map('n', 'g.', [[/\V<C-r>"<CR>cgn<C-a><Esc>]], { desc = 'Searches for the text last replaced and repeat the replace' })
 
 -- maximizertoggle
-map('n', '<leader>m', '<cmd>MaximizerToggle<CR>')
+map('n', '<leader>m', '<cmd>MaximizerToggle<CR>', { desc = 'Maximizes / Un-maximizes current buffer' })
 
 -- cycle buffers
 map('n', '<tab>', '<cmd>bn<cr>')

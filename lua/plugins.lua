@@ -94,6 +94,7 @@ Plug('b0o/schemastore.nvim')
 Plug('mg979/vim-visual-multi', { ['branch'] = 'master' })
 Plug('folke/todo-comments.nvim')
 Plug('Mofiqul/trld.nvim')
+Plug('linty-org/key-menu.nvim')
 
 -- Development
 -- Plug('~/Workspace/code/nvim/plugins/stackmap.nvim')

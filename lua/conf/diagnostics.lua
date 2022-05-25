@@ -37,11 +37,11 @@ if not saga_ok then
   end
 
   -- mappings
-  map('n', '<leader>dn', vim.diagnostic.goto_next)
-  map('n', '<leader>dp', vim.diagnostic.goto_prev)
-  map('n', '<leader>ds', vim.diagnostic.open_float)
-  map('n', '<leader>da', vim.diagnostic.setloclist)
-  map('n', '<leader>dt', toggle_diagnostics)
+  map('n', '<leader>dn', vim.diagnostic.goto_next, { desc = 'Goes to the next diagnostic' })
+  map('n', '<leader>dp', vim.diagnostic.goto_prev, { desc = 'Goes to the previous diagnostic' })
+  map('n', '<leader>ds', vim.diagnostic.open_float, { desc = 'Shows diagnostics in a floating window' })
+  map('n', '<leader>da', vim.diagnostic.setloclist, { desc = 'Shows diagnostics in Quickfix' })
+  map('n', '<leader>dt', toggle_diagnostics, { desc = 'Turns on and off diagnostics' })
 end
 
 -- Diagnostic Signs
