@@ -28,4 +28,8 @@ M.is_file_present = function(filename)
   return vim.fn.filereadable(vim.fn.expand(filename)) == 1
 end
 
+function M.is_empty(s)
+  return s == nil or s == ''
+end
+
 return M

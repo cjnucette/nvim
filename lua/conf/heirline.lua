@@ -3,30 +3,32 @@ if not heirline_ok then
   return
 end
 
--- Autocommands
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
+-- Abbreviations
+local api = vim.api
+local set = vim.opt
+local augroup = api.nvim_create_augroup
+local autocmd = api.nvim_create_autocmd
 
+-- statusline options
+set.laststatus = 3
+set.showmode = false
+set.cmdheight = 2
+
+-- Autocommands
 local Heirline = augroup('Heirline', { clear = true })
 autocmd('ColorScheme', { group = Heirline, callback = function()
   require('heirline').reset_highlights()
   vim.cmd('luafile  ~/.config/nvim/lua/conf/heirline.lua')
 end })
 
--- Abbreviations
-local api = vim.api
-local set = vim.opt
 
 -- Helper and Utilities
 local conditions = require('heirline.conditions')
 local utils = require('heirline.utils')
 local signs = require('utils').signs
 local capitalize = require('utils').capitalize
+local is_empty = require('utils').is_empty
 
--- statusline options
-set.laststatus = 3
-set.showmode = false
-set.cmdheight = 2
 
 -- statusline
 local colors = {
@@ -52,8 +54,13 @@ local colors = {
   },
 }
 
-local Align = {
-  provider = '%=',
+local Gap = {
+  provider = function()
+    return '%='
+  end,
+  hl = function()
+    return { fg = utils.get_highlight('Normal').fg, bg = utils.get_highlight('Normal').bg }
+  end
 }
 
 local Space = utils.make_flexible_component(1, {
@@ -187,15 +194,26 @@ local ShortDiag = {
 }
 
 local Diagnostics = {
-  condition = conditions.has_diagnostics,
+  condition = function()
+    return conditions.has_diagnostics or vim.b.coc_diagnostic_info
+  end,
 
   init = function(self)
-    self.diagnostics = {
-      error = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR }),
-      warning = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN }),
-      hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT }),
-      information = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO }),
-    }
+    if vim.b.coc_diagnostic_info then
+      self.diagnostics = {
+        error = vim.b.coc_diagnostic_info['error'],
+        warning = vim.b.coc_diagnostic_info['warning'],
+        hint = vim.b.coc_diagnostic_info['hint'],
+        information = vim.b.coc_diagnostic_info['information']
+      }
+    else
+      self.diagnostics = {
+        error = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR }),
+        warning = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN }),
+        hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT }),
+        information = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO }),
+      }
+    end
   end,
   utils.make_flexible_component(1, LongDiag, { ShortDiag, Space }),
 }
@@ -265,6 +283,12 @@ local Git = {
     provider = function(self)
       return ' ' .. self.status_dict.head
     end,
+    on_click = {
+      callback = function()
+        vim.cmd('0G')
+      end,
+      name = 'git'
+    }
   },
   -- You could handle delimiters, icons and counts similar to Diagnostics
   utils.make_flexible_component(1, {
@@ -338,15 +362,29 @@ local FileFormat = {
     return self.fmt[vim.bo.fileformat]
   end,
 }
+local Words = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'markdown', 'text' } })
+  end,
+  Space,
+  utils.make_flexible_component(1, {
+    provider = function()
+      return 'Words:' .. vim.fn.wordcount().words
+    end,
+  }, {
+    provider = function()
+      return 'W:' .. vim.fn.wordcount().words
+    end,
+  }),
+}
 
 local FileName = {
   init = function(self)
-    local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':.')
+    local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':.') -- with path
+    -- local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t') -- without path
 
     self.filename = fname ~= '' and fname or '[No Name]'
   end,
-
-  -- hl = { bg = utils.get_highlight('Normal').bg }, -- ???
 
   utils.make_flexible_component(1, {
     provider = function(self)
@@ -419,10 +457,33 @@ local FileType = {
 }
 
 local LSPActive = {
-  condition = conditions.lsp_attached,
-
-  provider = '',
+  condition = function()
+    return conditions.lsp_attached or vim.g.coc_enabled == 1
+  end,
+  on_click = {
+    callback = function()
+      if vim.g.coc_enabled == 1 then
+        vim.cmd('CocInfo')
+      else
+        vim.cmd('LspInfo')
+      end
+    end,
+    name = 'lspactive'
+  },
+  {
+    condition = vim.g.coc_enabled == 1,
+    provider = function()
+      local status = not is_empty(vim.g.coc_status) and '(' .. vim.fn.trim(vim.g.coc_status or '') .. ')' or ''
+      return status
+    end
+  },
+  {
+    condition = conditions.lsp_attached,
+    provider = function()
+      return ''
+    end
   -- provider = '',
+  }
 }
 
 local Spell = {
@@ -442,36 +503,38 @@ local Spell = {
   }
 }
 
+local live_server = require('live_server')
+
 local LiveServer = {
   condition = function()
-    return require('live_server').has_start_scripts() or conditions.buffer_matches({ filetype = { 'html', 'css', 'js', 'ts' } })
+    live_server.setup()
+
+    return live_server.is_available
   end,
+
+  on_click = {
+    callback = live_server.handle_click,
+    name = 'liveserver'
+  },
+
   Space,
+
   {
-    condition = function()
-      return require('live_server').is_active
+    hl = function()
+      return live_server.is_active and { fg = colors.green } or { fg = colors.red }
     end,
 
-    hl = { fg = colors.green },
-
     provider = function()
-      return ' '
+      return '爵'
     end,
   },
-  {
-    condition = function()
-      return not require('live_server').is_active
-    end,
-
-    provider = function()
-      return '睊'
-    end,
-  }
 }
 
 local Gps = {
   condition = require('nvim-gps').is_available,
-  provider = require('nvim-gps').get_location
+  provider = function()
+    return ' > ' .. require('nvim-gps').get_location()
+  end
 }
 
 local TerminalStatusLine = {
@@ -526,6 +589,24 @@ local PluginManagerStatusLine = {
   Ruler,
   Delimiter,
 }
+local FugitiveStatusLine = {
+  condition = function()
+    -- return vim.bo.ft == 'vim-plug' or vim.bo.ft == 'packer'
+    return conditions.buffer_matches({ filetype = { 'fugitive' } }) -- nop
+  end,
+
+  Delimiter,
+  {
+    -- hl = { fg = colors.folder },
+
+    provider = '  ',
+  },
+  {
+    provider = 'Fugitive%=',
+  },
+  Ruler,
+  Delimiter,
+}
 
 local CheckhealthStatusLine = {
   condition = function()
@@ -563,16 +644,16 @@ local HttpStatusLine = {
   Delimiter,
 }
 
+
 local DefaultStatusLine = {
   Delimiter,
   Diagnostics,
   ViMode,
   Space,
   Git,
+  Words,
   Delimiter,
-  Align,
-  -- FileName,
-  -- Align,
+  Gap,
   Delimiter,
   Ruler,
   Space,
@@ -595,7 +676,7 @@ local InactiveStatusLine = {
   Delimiter,
   FileIcon,
   FileName,
-  Align,
+  Gap,
   Delimiter,
 }
 
@@ -607,7 +688,8 @@ local Statusline = {
       return {
         -- fg = utils.get_highlight('Statusline').fg,
         -- bg = utils.get_highlight('Statusline').bg,
-        fg = colors.white,
+        -- fg = colors.white,
+        fg = utils.get_highlight('PmenuSel').fg,
         bg = utils.get_highlight('PmenuSel').bg,
       }
     else
@@ -623,45 +705,51 @@ local Statusline = {
   FileExplorerStatusLine,
   PluginManagerStatusLine,
   HttpStatusLine,
+  FugitiveStatusLine,
   CheckhealthStatusLine,
   InactiveStatusLine,
   DefaultStatusLine,
 }
 
 local WinBars = {
-  -- init = utils.pick_child_on_condition,
   { -- Hide the winbar for special buffers
     condition = function()
       return conditions.buffer_matches({
         buftype = { 'nofile', 'prompt', 'help', 'quickfix', 'terminal' },
-        filetype = { '^git.*', 'fugitive' },
+        filetype = { '^git.*', 'fugitive', 'checkhealth', 'vim-plug', 'neo-tree' },
       })
     end,
     provider = '',
   },
+  Delimiter,
   {
+    provider = function()
+      return '%n: '
+    end,
+  },
+  FileIcon,
+  {
+    provider = function()
+      return '%R%M %f'
+    end,
     hl = function()
       return { bg = utils.get_highlight('LineNr').bg, fg = utils.get_highlight('LineNr').fg }
     end
   },
-  -- A winbar for regular files
-  Delimiter,
-  FileIcon,
-  FileName,
-  -- {
-  --   init = function(self)
-  --     -- local fname = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t')
-  --
-  --     self.filename = vim.fn.expand('%:t')
-  --   end,
-  --   provider = function(self)
-  --     return self.filename
-  --   end
-  -- },
+  Gps,
+  Gap,
   {
-    provider = ' > '
-  },
-  Gps
+    provider = function()
+      return ' ' .. vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 })) .. ' '
+    end,
+    hl = function()
+      return {
+        -- fg = colors.white,
+        fg = utils.get_highlight('PmenuSel').fg,
+        bg = utils.get_highlight('PmenuSel').bg,
+      }
+    end
+  }
 }
 
 heirline.setup(Statusline, WinBars)
