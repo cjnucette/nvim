@@ -4,10 +4,12 @@ if not lspconfig_ok then return end
 local lsp_installer_ok, lsp_installer = pcall(require, 'nvim-lsp-installer')
 if not lsp_installer_ok then return end
 
+require('conf/lsp/servers/custom_servers/ls_emmet')
+
 local servers = {
   'sumneko_lua',
   'tsserver',
-  -- 'emmet_ls',
+  'ls_emmet',
   'bashls',
   'html',
   'cssls',
