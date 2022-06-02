@@ -43,10 +43,15 @@ toggleterm.setup({
 
 local Terminal = require('toggleterm.terminal').Terminal
 local node = Terminal:new({ cmd = 'node', hidden = true })
+local deno = Terminal:new({ cmd = 'deno', hidden = true })
 local lazygit = Terminal:new({ cmd = 'lazygit', hidden = true })
 
 function _G.nodeToggle()
   node:toggle()
+end
+
+function _G.denoToggle()
+  deno:toggle()
 end
 
 function _G.lazygitToggle()
@@ -54,4 +59,5 @@ function _G.lazygitToggle()
 end
 
 require('utils').map('n','<A-n>', nodeToggle)
+require('utils').map('n','<A-d>', denoToggle)
 require('utils').map('n','<A-g>', lazygitToggle)
