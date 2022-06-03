@@ -29,7 +29,7 @@ Plug('folke/tokyonight.nvim')
 Plug('joshdick/onedark.vim')
 Plug('shaunsingh/nord.nvim')
 Plug('dracula/vim', { ['as'] = 'dracula' })
-Plug('cocopon/iceberg.vim')
+Plug('projekt0n/github-nvim-theme')
 
 -- lsp
 Plug('neovim/nvim-lspconfig')
@@ -39,17 +39,16 @@ Plug('stevearc/dressing.nvim')
 
 -- completion and snippets
 Plug('hrsh7th/nvim-cmp')
-Plug('hrsh7th/vim-vsnip')
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('hrsh7th/cmp-nvim-lua')
+Plug('hrsh7th/cmp-nvim-lsp-signature-help')
 Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
+Plug('hrsh7th/cmp-cmdline')
+Plug('hrsh7th/vim-vsnip')
 Plug('hrsh7th/cmp-vsnip')
 Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', { ['do'] = 'npm install' })
 Plug('dsznajder/vscode-es7-javascript-react-snippets', { ['do'] = 'yarn install --frozen-lockfile && yarn compile' })
-
--- emmet (lsp versions suck)
-Plug('mattn/emmet-vim')
 
 -- formatter
 -- Plug('mhartington/formatter.nvim')

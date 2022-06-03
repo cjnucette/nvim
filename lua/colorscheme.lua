@@ -52,6 +52,14 @@ require('material').setup({
 vim.g.material_style = 'palenight'
 cmd([[colorscheme material]])
 
+-- require('github-theme').setup({
+--   -- themes: dark, dimmed, dark_default, drark_colorblind
+--   -- light, light_default, light_colorblind
+--   theme_style = 'dark',
+--   keyword_style = 'italic',
+--   sidebars = { 'terminal' }
+-- })
+
 -- vim.g.onedark_hide_endofbuffer=1
 -- vim.g.onedark_terminal_italics=1
 -- cmd([[colorscheme onedark]])
