@@ -15,7 +15,7 @@ indent.setup({
   use_treesitter = true,
   show_first_indent_level = true,
   context_highlight = 'Function',
-  context_patterns = { 'function', 'class', 'method', 'if' },
+  context_patterns = { 'function', 'class', 'method', 'if', 'for', 'while', 'object', 'table', 'dictionary' },
   disable_with_nolist = true,
   -- char_highlight_list = {'IndentBlanklineContextChar', 'IndentBlanklineContextStart'},
   -- space_char_highlight_list = {'IndentBlanklineContextChar', 'IndentBlanklineContextStart'},
