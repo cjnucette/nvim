@@ -8,6 +8,7 @@ vim.g.maplocalleader = ' '
 -- key-menu conf
 vim.o.timeoutlen = 300
 require('key-menu').set('n', '<space>')
+require('key-menu').set('n', 'g')
 
 -- maps
 map('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>', { desc = 'Loads init.lua' })
