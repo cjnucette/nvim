@@ -12,7 +12,7 @@ if not configs.ls_emmet then
   configs.ls_emmet = {
     default_config = {
       cmd = { server_name, '--stdio' },
-      filetypes = { 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact' },
+      filetypes = { 'html', 'css', 'scss' },
       root_dir = util.find_git_ancestor,
       single_file_support = true,
       settings = {}
