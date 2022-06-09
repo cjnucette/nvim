@@ -7,3 +7,4 @@ plugin/packer_compiled.vim
 .env
 plugin/packer_compiled.lua
 lsp_servers/
+project_nvim/
