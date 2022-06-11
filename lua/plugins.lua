@@ -23,6 +23,9 @@ Plug('nvim-treesitter/playground')
 Plug('RRethy/nvim-treesitter-endwise')
 Plug('SmiteshP/nvim-gps')
 
+-- syntax
+Plug('LnL7/vim-nix')
+
 -- themes
 Plug('marko-cerovac/material.nvim')
 Plug('folke/tokyonight.nvim')
@@ -47,8 +50,10 @@ Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-cmdline')
 Plug('hrsh7th/vim-vsnip')
 Plug('hrsh7th/cmp-vsnip')
-Plug('https://github.com/DeepInThought/vscode-shell-snippets.git', { ['do'] = 'npm install' })
-Plug('dsznajder/vscode-es7-javascript-react-snippets', { ['do'] = 'yarn install --frozen-lockfile && yarn compile' })
+Plug('https://github.com/DeepInThought/vscode-shell-snippets.git',
+  { ['do'] = 'npm install' })
+Plug('dsznajder/vscode-es7-javascript-react-snippets',
+  { ['do'] = 'yarn install --frozen-lockfile && yarn compile' })
 
 -- formatter
 -- Plug('mhartington/formatter.nvim')
@@ -80,7 +85,8 @@ Plug('windwp/nvim-ts-autotag')
 Plug('markonm/traces.vim')
 Plug('szw/vim-maximizer')
 Plug('numToStr/Comment.nvim')
-Plug('iamcco/markdown-preview.nvim', { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
+Plug('iamcco/markdown-preview.nvim',
+  { ['for'] = 'markdown', ['do'] = 'cd app && yarn install' })
 Plug('andymass/vim-matchup')
 Plug('lukas-reineke/indent-blankline.nvim')
 Plug('vuki656/package-info.nvim') -- deps: nui

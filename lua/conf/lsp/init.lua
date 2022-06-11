@@ -25,6 +25,7 @@ local servers = {
   'taplo',
   'vimls',
   'yamlls',
+  'rnix',
 }
 
 -- local ensure_installed = vim.tbl_filter(function(d) return d ~= '' end, servers)
